@@ -16,8 +16,8 @@ and a clean REST API.
 
 ** 1. Enter the dev shell
 
-#+begin_src sh
-nix develop
+#+begin_src fish
+  nix develop
 #+end_src
 
 This sets ~DATABASE_URL~ and ~LISTEN_SOCKET~ automatically and makes ~diesel~,
@@ -25,8 +25,8 @@ This sets ~DATABASE_URL~ and ~LISTEN_SOCKET~ automatically and makes ~diesel~,
 
 ** 2. Create the database
 
-#+begin_src sh
-just setup
+#+begin_src fish
+  just setup
 #+end_src
 
 This runs ~diesel setup~ (creates the database if missing) then applies all
@@ -34,28 +34,28 @@ pending migrations.
 
 ** 3. Start the server
 
-#+begin_src sh
-just run
+#+begin_src fish
+  just run
 #+end_src
 
 The server listens on ~$LISTEN_SOCKET:="0.0.0.0:3000"~.
 
 ** 4. Try it out
 
-#+begin_src sh
-# Health check
-curl http://localhost:3000/health
+#+begin_src fish
+  # Health check
+  curl http://localhost:3000/health
 
-# Create a user
-curl -X POST http://localhost:3000/users \
-  -H 'Content-Type: application/json' \
-  -d '{"name": "Alice", "email": "alice@example.com"}'
+  # Create a user
+  curl -X POST http://localhost:3000/users \
+    -H 'Content-Type: application/json' \
+    -d '{"name": "Alice", "email": "alice@example.com"}'
 
-# List users
-curl http://localhost:3000/users
+  # List users
+  curl http://localhost:3000/users
 
-# Get user by ID (replace with a real UUID)
-curl http://localhost:3000/users/<uuid>
+  # Get user by ID (replace with a real UUID)
+  curl http://localhost:3000/users/<uuid>
 #+end_src
 
 * API reference
@@ -67,49 +67,49 @@ All endpoints return JSON.  Errors follow the shape ~{"error": "message"}~.
 Liveness check.
 
 #+begin_src json
-{ "status": "ok" }
+  { "status": "ok" }
 #+end_src
 
 ** ~GET /users~
 
 List all users, ordered by ~created_at~ ascending.
 
-| Status | Description     |
-|--------+-----------------|
-| 200    | List of users   |
+| Status | Description   |
+|--------+---------------|
+|    200 | List of users |
 
 ** ~POST /users~
 
 Create a new user.
 
 #+begin_src json
-// Request
-{ "name": "Alice", "email": "alice@example.com" }
+  // Request
+  { "name": "Alice", "email": "alice@example.com" }
 #+end_src
 
-| Status | Description                                    |
-|--------+------------------------------------------------|
-| 201    | Created — returns the full user record          |
-| 409    | Conflict — a user with this email already exists|
+| Status | Description                                      |
+|--------+--------------------------------------------------|
+|    201 | Created — returns the full user record           |
+|    409 | Conflict — a user with this email already exists |
 
 ** ~GET /users/{id}~
 
 Fetch a single user by UUID.
 
-| Status | Description                  |
-|--------+------------------------------|
-| 200    | The user record              |
-| 404    | No user with this UUID exists|
+| Status | Description                   |
+|--------+-------------------------------|
+|    200 | The user record               |
+|    404 | No user with this UUID exists |
 
 * Configuration
 
 The application reads these environment variables:
 
-| Variable       | Default                        | Description                  |
-|----------------+--------------------------------+------------------------------|
+| Variable        | Default                                    | Description                  |
+|-----------------+--------------------------------------------+------------------------------|
 | ~DATABASE_URL~  | ~postgres://demo:demo@localhost:5432/demo~ | PostgreSQL connection string |
-| ~RUST_LOG~      | ~demo_server=info,tower_http=info~ | Tracing/logging filter       |
 | ~LISTEN_SOCKET~ | ~0.0.0.0:3000~                             | Socket address to listen on  |
+| ~RUST_LOG~      | ~demo_server=info,tower_http=info~         | Tracing/logging filter       |
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
 
@@ -127,17 +127,17 @@ Variables can be set in a ~.env~ file (loaded automatically on startup).
 
 ** Common commands
 
-| Command              | Description                                   |
-|----------------------+-----------------------------------------------|
-| ~just run~            | Start the development server                   |
-| ~just check~          | Run ~cargo check~                              |
-| ~just test~           | Run ~cargo test~                               |
-| ~just lint~           | Run ~cargo clippy -- -D warnings~              |
-| ~just fmt~            | Format code with ~rustfmt~                     |
-| ~just migrate~        | Run pending Diesel migrations                  |
-| ~just migration <name>~ | Create a new migration scaffold             |
-| ~just db-reset~       | Drop and recreate the database                 |
-| ~just ci~             | Full CI pipeline: check + test + lint          |
+| Command                 | Description                           |
+|-------------------------+---------------------------------------|
+| ~just run~              | Start the development server          |
+| ~just check~            | Run ~cargo check~                     |
+| ~just test~             | Run ~cargo test~                      |
+| ~just lint~             | Run ~cargo clippy -- -D warnings~     |
+| ~just fmt~              | Format code with ~rustfmt~            |
+| ~just migrate~          | Run pending Diesel migrations         |
+| ~just migration <name>~ | Create a new migration scaffold       |
+| ~just db-reset~         | Drop and recreate the database        |
+| ~just ci~               | Full CI pipeline: check + test + lint |
 
 Run ~just~ (no arguments) to see the full list.
 
