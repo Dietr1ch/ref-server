@@ -1,0 +1,13 @@
+# -*- mode: gitignore; -*-
+
+# Unix
+.*
+
+
+# Git
+!.gitignore
+
+
+# Project
+TODOs.org
+/target
