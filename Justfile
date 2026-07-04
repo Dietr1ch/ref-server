@@ -2,7 +2,7 @@
 # see https://just.systems/man/en/
 
 export DATABASE_URL := env_var_or_default("DATABASE_URL", "postgres://demo:demo@localhost:5432/demo")
-export BIND_ADDR	:= env_var_or_default("BIND_ADDR", "0.0.0.0:3000")
+export LISTEN_SOCKET	:= env_var_or_default("LISTEN_SOCKET", "0.0.0.0:3000")
 
 # ─── Meta ────────────────────────────────────────────────────────────────────
 

@@ -22,9 +22,9 @@ struct Config {
 	#[arg(env = "DATABASE_URL")]
 	database_url: String,
 
-	/// Address to bind the HTTP server.
-	#[arg(env = "BIND_ADDR", default_value = "0.0.0.0:3000")]
-	bind_addr: String,
+	/// Socket address (host:port) to listen on.
+	#[arg(env = "LISTEN_SOCKET", default_value = "0.0.0.0:3000")]
+	listen_socket: String,
 
 	/// Tracing/logging filter.
 	#[arg(env = "RUST_LOG", default_value = "demo_server=info,tower_http=info")]
@@ -61,11 +61,11 @@ async fn main() -> eyre::Result<()> {
 	// -----------
 	let app = routes::router(pool);
 
-	let listener = tokio::net::TcpListener::bind(&config.bind_addr)
+	let listener = tokio::net::TcpListener::bind(&config.listen_socket)
 		.await
 		.wrap_err("Failed to bind address")?;
 
-	tracing::info!("Listening on {}", config.bind_addr);
+	tracing::info!("Listening on {}", config.listen_socket);
 	axum::serve(listener, app).await.wrap_err("Server error")?;
 
 	Ok(())

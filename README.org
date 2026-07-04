@@ -20,7 +20,7 @@ and a clean REST API.
 nix develop
 #+end_src
 
-This sets ~DATABASE_URL~ and ~BIND_ADDR~ automatically and makes ~diesel~,
+This sets ~DATABASE_URL~ and ~LISTEN_SOCKET~ automatically and makes ~diesel~,
 ~cargo~, and ~psql~ available.
 
 ** 2. Create the database
@@ -108,8 +108,8 @@ The application reads these environment variables:
 | Variable       | Default                        | Description                  |
 |----------------+--------------------------------+------------------------------|
 | ~DATABASE_URL~  | ~postgres://demo:demo@localhost:5432/demo~ | PostgreSQL connection string |
-| ~BIND_ADDR~     | ~0.0.0.0:3000~                 | Address to bind the HTTP server |
 | ~RUST_LOG~      | ~demo_server=info,tower_http=info~ | Tracing/logging filter       |
+| ~LISTEN_SOCKET~ | ~0.0.0.0:3000~                             | Socket address to listen on  |
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
 

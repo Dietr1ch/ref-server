@@ -54,12 +54,12 @@
 
           # Environment variables for development
           DATABASE_URL = "postgres://demo:demo@localhost:5432/demo";
-          BIND_ADDR = "0.0.0.0:3000";
+          LISTEN_SOCKET = "0.0.0.0:3000";
 
           shellHook = ''
             echo "🦀 demo-server dev shell"
             echo "   DATABASE_URL=$DATABASE_URL"
-            echo "   BIND_ADDR=$BIND_ADDR"
+            echo "   LISTEN_SOCKET=$LISTEN_SOCKET"
             echo ""
             echo "Run: cargo run          # start the server"
             echo "     diesel setup       # create database & run migrations"
