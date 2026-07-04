@@ -36,6 +36,11 @@ db-reset:
 	diesel database reset
 	diesel migration run
 
+# Nuke devenv's PostgreSQL state (e.g. after switching pg versions).
+# The data gets recreated on next `devenv up`.
+db-clean-state:
+	rm -rf .devenv/state/postgres
+
 # ─── Development ─────────────────────────────────────────────────────────────
 
 # Start the development server
@@ -57,7 +62,7 @@ lint:
 # Format Rust and Nix code
 fmt:
 	cargo fmt
-	nixpkgs-fmt flake.nix
+	nixpkgs-fmt *.nix
 
 # Format code, then check it still compiles
 fmt-check: fmt check

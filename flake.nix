@@ -4,67 +4,26 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    devenv.url = "github:cachix/devenv";
+  };
+
+  nixConfig = {
+    extra-trusted-public-keys =
+      "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
+    extra-substituters = "https://devenv.cachix.org";
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , flake-utils
-    , rust-overlay
-    ,
-    }:
+    { self, nixpkgs, flake-utils, devenv, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        overlays = [ (import rust-overlay) ];
-        pkgs = import nixpkgs { inherit system overlays; };
-        rustToolchain = pkgs.rust-bin.stable.latest.default.override {
-          extensions = [ "rust-src" "rust-analyzer" "clippy" ];
-        };
+        pkgs = nixpkgs.legacyPackages.${system};
       in
       {
-        devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            # Rust toolchain
-            rustToolchain
-
-            # Diesel CLI for managing migrations
-            diesel-cli
-
-            # PostgreSQL client (psql, pg_isready, etc.)
-            postgresql
-
-            # Build-time dependencies
-            pkg-config
-            openssl
-
-            # Nix formatter
-            nixpkgs-fmt
-
-            # Project helpers
-            just
-
-            # Environment variable loading
-            direnv
-          ];
-
-          # Environment variables for development
-          DATABASE_URL = "postgres://demo:demo@localhost:5432/demo";
-          LISTEN_SOCKET = "0.0.0.0:3000";
-
-          shellHook = ''
-            echo "🦀 demo-server dev shell"
-            echo "   DATABASE_URL=$DATABASE_URL"
-            echo "   LISTEN_SOCKET=$LISTEN_SOCKET"
-            echo ""
-            echo "Run: cargo run          # start the server"
-            echo "     diesel setup       # create database & run migrations"
-            echo "     diesel migration run  # run pending migrations"
-          '';
+        devShells.default = devenv.lib.mkShell {
+          inherit inputs pkgs;
+          modules = [ ./devenv.nix ];
         };
       }
     );
