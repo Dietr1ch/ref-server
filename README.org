@@ -42,65 +42,34 @@ The server listens on ~$LISTEN_SOCKET:="0.0.0.0:3000"~.
 
 ** 4. Try it out
 
-#+begin_src fish
-  # Health check
-  xh http://localhost:3000/health
-
-  # Create a user
-  xh POST \
-    http://localhost:3000/users \
-    name=Alice \
-    email=alice@example.com
-
-  # List users
-  xh http://localhost:3000/users
-
-  # Get user by ID (replace with a real UUID)
-  xh http://localhost:3000/users/<uuid>
-#+end_src
+Open this file in Emacs with ~verb-mode~ enabled, then place point on any
+heading under the [[*API reference][API reference]] section below and press ~C-c C-r C-r~
+to send the request.
 
 * API reference
 
 All endpoints return JSON.  Errors follow the shape ~{"error": "message"}~.
 
-** ~GET /health~
+The headings below are live requests — open this file in Emacs with ~verb-mode~
+and press ~, r r~ (~C-c C-r C-r~) while on any of them to send the request.
 
-Liveness check.
+** demo-server                                                        :verb:
+template http://localhost:3000
 
-#+begin_src json
-  { "status": "ok" }
-#+end_src
+*** Health check
+get /health
 
-** ~GET /users~
+*** List users
+get /users
 
-List all users, ordered by ~created_at~ ascending.
+*** Get user
+get /users/<uuid>
 
-| Status | Description   |
-|--------+---------------|
-|    200 | List of users |
+*** Create user
+post /users
+Content-Type: application/json
 
-** ~POST /users~
-
-Create a new user.
-
-#+begin_src json
-  // Request
-  { "name": "Alice", "email": "alice@example.com" }
-#+end_src
-
-| Status | Description                                      |
-|--------+--------------------------------------------------|
-|    201 | Created — returns the full user record           |
-|    409 | Conflict — a user with this email already exists |
-
-** ~GET /users/{id}~
-
-Fetch a single user by UUID.
-
-| Status | Description                   |
-|--------+-------------------------------|
-|    200 | The user record               |
-|    404 | No user with this UUID exists |
+{"name": "Alice", "email": "alice@example.com"}
 
 * Configuration
 
