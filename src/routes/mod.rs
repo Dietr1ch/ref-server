@@ -23,9 +23,8 @@ pub fn router(pool: DbPool) -> Router {
 		.with_state(pool)
 }
 
-// ---------------------------------------------------------------------------
 // Handlers
-// ---------------------------------------------------------------------------
+// ========
 
 /// Liveness / readiness check.
 async fn health() -> Json<serde_json::Value> {
@@ -91,9 +90,8 @@ async fn get_user(
 	Ok(Json(user))
 }
 
-// ---------------------------------------------------------------------------
 // Error handling
-// ---------------------------------------------------------------------------
+// ==============
 
 /// Unified application error type that produces JSON error responses.
 struct AppError {

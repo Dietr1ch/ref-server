@@ -26,7 +26,8 @@ async fn main() -> eyre::Result<()> {
 		.with_env_filter(EnvFilter::new(&*LOG_FILTER))
 		.init();
 
-	// ----- Database --------------------------------------------------------
+	// Database
+	// --------
 	let database_url = std::env::var("DATABASE_URL").wrap_err("DATABASE_URL must be set")?;
 
 	let manager = ConnectionManager::<PgConnection>::new(&database_url);
@@ -44,7 +45,8 @@ async fn main() -> eyre::Result<()> {
 		tracing::info!("Database migrations up to date");
 	}
 
-	// ----- HTTP server -----------------------------------------------------
+	// HTTP server
+	// -----------
 	let app = routes::router(pool);
 
 	let bind_addr = std::env::var("BIND_ADDR").unwrap_or_else(|_| "0.0.0.0:3000".into());
