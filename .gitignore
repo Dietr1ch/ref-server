@@ -8,6 +8,10 @@
 !.gitignore
 
 
+# Rust
+!.clippy.toml
+!.rustfmt.toml
+
 # Project
 TODOs.org
 /target

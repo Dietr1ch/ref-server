@@ -1,0 +1,4 @@
+# https://doc.rust-lang.org/clippy/
+
+# https://doc.rust-lang.org/clippy/lint_configuration.html#avoid-breaking-exported-api
+avoid-breaking-exported-api = false
