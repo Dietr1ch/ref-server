@@ -1,7 +1,3 @@
-mod models;
-mod routes;
-mod schema;
-
 use std::sync::LazyLock;
 
 use diesel::PgConnection;
@@ -9,6 +5,8 @@ use diesel::r2d2::{ConnectionManager, Pool};
 use diesel_migrations::{MigrationHarness, embed_migrations};
 use eyre::Context;
 use tracing_subscriber::EnvFilter;
+
+use demo_server::routes;
 
 /// Embedded Diesel migrations (run automatically on startup).
 const MIGRATIONS: diesel_migrations::EmbeddedMigrations = embed_migrations!("migrations");

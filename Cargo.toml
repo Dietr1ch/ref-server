@@ -3,6 +3,7 @@ name = "demo-server"
 version = "0.1.0"
 edition = "2024"
 readme = "README.org"
+default-run = "server"
 
 [dependencies]
 axum = "0.8"
