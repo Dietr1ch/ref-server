@@ -66,6 +66,11 @@ fmt-check: fmt check
 doc:
 	cargo doc --open
 
+update:
+	nix flake update
+	cargo update
+
+
 # Clean build artifacts
 clean:
 	cargo clean
