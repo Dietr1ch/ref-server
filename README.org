@@ -44,18 +44,19 @@ The server listens on ~$LISTEN_SOCKET:="0.0.0.0:3000"~.
 
 #+begin_src fish
   # Health check
-  curl http://localhost:3000/health
+  xh http://localhost:3000/health
 
   # Create a user
-  curl -X POST http://localhost:3000/users \
-    -H 'Content-Type: application/json' \
-    -d '{"name": "Alice", "email": "alice@example.com"}'
+  xh POST \
+    http://localhost:3000/users \
+    name=Alice \
+    email=alice@example.com
 
   # List users
-  curl http://localhost:3000/users
+  xh http://localhost:3000/users
 
   # Get user by ID (replace with a real UUID)
-  curl http://localhost:3000/users/<uuid>
+  xh http://localhost:3000/users/<uuid>
 #+end_src
 
 * API reference
