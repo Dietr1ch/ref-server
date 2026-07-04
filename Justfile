@@ -4,13 +4,19 @@
 export DATABASE_URL := env_var_or_default("DATABASE_URL", "postgres://demo:demo@localhost:5432/demo")
 export LISTEN_SOCKET	:= env_var_or_default("LISTEN_SOCKET", "0.0.0.0:3000")
 
-# ─── Meta ────────────────────────────────────────────────────────────────────
+
+
+# Meta
+# ====
 
 # Show available recipes
 default:
 	@just --list
 
-# ─── Database ────────────────────────────────────────────────────────────────
+
+
+# Database
+# ========
 
 # Create the database and run migrations
 setup: db-create migrate
@@ -41,7 +47,10 @@ db-reset:
 db-clean-state:
 	rm -rf .devenv/state/postgres
 
-# ─── Development ─────────────────────────────────────────────────────────────
+
+
+# Development
+# ===========
 
 # Start the development server
 run:
@@ -83,7 +92,10 @@ update:
 clean:
 	cargo clean
 
-# ─── Full CI pipeline ────────────────────────────────────────────────────────
+
+
+# CI
+# ==
 
 # Run the full CI pipeline: check, test, lint
 ci: check test lint
