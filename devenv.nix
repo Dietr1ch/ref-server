@@ -40,9 +40,7 @@
     # Nix
     nixpkgs-fmt
 
-    # Rust toolchain extensions (via nixpkgs)
-    rust-analyzer
-    clippy
+    # Rust (./rust-toolchain.toml)
   ]; # ..packages
 
   env = {
