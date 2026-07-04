@@ -1,5 +1,4 @@
-use std::sync::LazyLock;
-
+use clap::Parser;
 use diesel::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
 use diesel_migrations::{MigrationHarness, embed_migrations};
@@ -11,26 +10,39 @@ use demo_server::routes;
 /// Embedded Diesel migrations (run automatically on startup).
 const MIGRATIONS: diesel_migrations::EmbeddedMigrations = embed_migrations!("migrations");
 
-/// Default log filter: info-level for our crate and tower-http.
-static LOG_FILTER: LazyLock<String> = LazyLock::new(|| {
-	std::env::var("RUST_LOG").unwrap_or_else(|_| "demo_server=info,tower_http=info".into())
-});
+/// Configuration read from environment variables.
+#[derive(Parser)]
+#[command(
+	name = "demo-server",
+	version,
+	about = "axum + diesel + PostgreSQL demo"
+)]
+struct Config {
+	/// PostgreSQL connection string.
+	#[arg(env = "DATABASE_URL")]
+	database_url: String,
+
+	/// Address to bind the HTTP server.
+	#[arg(env = "BIND_ADDR", default_value = "0.0.0.0:3000")]
+	bind_addr: String,
+
+	/// Tracing/logging filter.
+	#[arg(env = "RUST_LOG", default_value = "demo_server=info,tower_http=info")]
+	rust_log: String,
+}
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
-	// Load .env file (sibling to Cargo.toml)
-	dotenvy::dotenv().ok();
+	let config = Config::parse();
 
-	// Initialise structured logging
+	// Structured logging
 	tracing_subscriber::fmt()
-		.with_env_filter(EnvFilter::new(&*LOG_FILTER))
+		.with_env_filter(EnvFilter::new(&config.rust_log))
 		.init();
 
 	// Database
 	// --------
-	let database_url = std::env::var("DATABASE_URL").wrap_err("DATABASE_URL must be set")?;
-
-	let manager = ConnectionManager::<PgConnection>::new(&database_url);
+	let manager = ConnectionManager::<PgConnection>::new(&config.database_url);
 	let pool = Pool::builder()
 		.build(manager)
 		.wrap_err("Failed to build connection pool")?;
@@ -49,12 +61,11 @@ async fn main() -> eyre::Result<()> {
 	// -----------
 	let app = routes::router(pool);
 
-	let bind_addr = std::env::var("BIND_ADDR").unwrap_or_else(|_| "0.0.0.0:3000".into());
-	let listener = tokio::net::TcpListener::bind(&bind_addr)
+	let listener = tokio::net::TcpListener::bind(&config.bind_addr)
 		.await
 		.wrap_err("Failed to bind address")?;
 
-	tracing::info!("Listening on {bind_addr}");
+	tracing::info!("Listening on {}", config.bind_addr);
 	axum::serve(listener, app).await.wrap_err("Server error")?;
 
 	Ok(())
