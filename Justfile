@@ -51,6 +51,9 @@ run:
 check:
 	cargo check
 
+build:
+	cargo build
+
 # Run all tests
 test:
 	cargo test
