@@ -54,9 +54,10 @@ test:
 lint:
 	cargo clippy -- -D warnings
 
-# Format code with rustfmt
+# Format Rust and Nix code
 fmt:
 	cargo fmt
+	nixpkgs-fmt flake.nix
 
 # Format code, then check it still compiles
 fmt-check: fmt check
