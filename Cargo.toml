@@ -21,6 +21,10 @@ eyre = "0.6"
 uuid = { version = "1", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 
+[dev-dependencies]
+googletest = "0.14"
+tower = { version = "0.5", features = ["util"] }
+
 [profile.dev]
 debug = "line-tables-only"
 opt-level = 0

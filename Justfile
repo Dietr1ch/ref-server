@@ -32,7 +32,7 @@ db-reset:
 	diesel migration run
 
 # Nuke devenv's PostgreSQL state (e.g. after switching pg versions).
-# The data gets recreated on next `devenv up`.
+# The data gets recreated on next `devenv processes up`.
 db-clean-state:
 	rm -rf .devenv/state/postgres
 
@@ -52,9 +52,13 @@ check: fmt
 build:
 	cargo build
 
-# Run all tests
+# Run all tests (requires `devenv processes up` for integration tests)
 test:
 	cargo test
+
+# Run fast unit tests (no database needed)
+test-unit:
+	cargo test --lib
 
 # Run clippy lints
 lint:
@@ -83,5 +87,8 @@ clean:
 # CI
 # ==
 
-# Run the full CI pipeline: check, test, lint
+# Run the full CI pipeline (requires PostgreSQL via `devenv processes up`)
 ci: check test lint
+
+# Quick CI — unit tests only, no database needed
+ci-quick: check test-unit lint
