@@ -9,7 +9,7 @@ use diesel::r2d2::{ConnectionManager, Pool};
 use serde_json::json;
 use uuid::Uuid;
 
-use crate::models::{NewUser, User};
+use crate::models::user::{NewUser, User};
 
 /// Type alias for our PostgreSQL connection pool.
 pub type DbPool = Pool<ConnectionManager<PgConnection>>;
