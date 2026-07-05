@@ -1,6 +1,9 @@
 use clap::Parser;
-use diesel::PgConnection;
-use diesel::r2d2::{ConnectionManager, Pool};
+use diesel::Connection;
+use diesel::pg::PgConnection;
+use diesel_async::AsyncPgConnection;
+use diesel_async::pooled_connection::AsyncDieselConnectionManager;
+use diesel_async::pooled_connection::bb8::Pool;
 use diesel_migrations::{MigrationHarness, embed_migrations};
 use eyre::Context;
 use tracing_subscriber::EnvFilter;
@@ -42,19 +45,29 @@ async fn main() -> eyre::Result<()> {
 
 	// Database
 	// --------
-	let manager = ConnectionManager::<PgConnection>::new(&config.database_url);
+	let connection_config =
+		AsyncDieselConnectionManager::<AsyncPgConnection>::new(&config.database_url);
 	let pool = Pool::builder()
-		.build(manager)
+		.build(connection_config)
+		.await
 		.wrap_err("Failed to build connection pool")?;
 
-	// Run pending migrations at startup
+	// Run pending migrations at startup.
+	// Uses sync Diesel/libpq (spawn_blocking) rather than tokio-postgres because
+	// tokio-postgres parses the connection URL differently from libpq, which can
+	// cause failures with Unix-socket-based connection strings.
 	{
-		let mut conn = pool
-			.get()
-			.wrap_err("Failed to get connection for migrations")?;
-		conn.run_pending_migrations(MIGRATIONS)
-			.map_err(|e| eyre::eyre!("Migration failed: {e}"))?;
-		tracing::info!("Database migrations up to date");
+		let database_url = config.database_url.clone();
+		tokio::task::spawn_blocking(move || {
+			let mut conn = PgConnection::establish(&database_url)
+				.wrap_err("Failed to connect to database for migrations")?;
+			conn.run_pending_migrations(MIGRATIONS)
+				.map_err(|e| eyre::eyre!("Migration failed: {e}"))?;
+			tracing::info!("Database migrations up to date");
+			Ok::<_, eyre::Report>(())
+		})
+		.await
+		.map_err(|e| eyre::eyre!("Migration thread panicked: {e}"))??;
 	}
 
 	// HTTP server
