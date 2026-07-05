@@ -39,6 +39,7 @@
 
     # Tools
     diesel-cli
+    bacon
     just
 
     # Nix

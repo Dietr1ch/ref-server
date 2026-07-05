@@ -16,5 +16,6 @@
 !.rustfmt.toml
 
 # Project
+!.config
 TODOs.org
 /target
