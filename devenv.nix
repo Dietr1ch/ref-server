@@ -24,11 +24,7 @@
       # The system might be running Postgres and make this pick :5432 or :5433 on some systems
       port = 35432;
 
-      initialDatabases = [
-        {
-          name = "demo";
-        }
-      ];
+      initialDatabases = [ { name = "demo"; } ];
     }; # ..services.postgres
   }; # ..services
 
