@@ -1,5 +1,5 @@
 {
-  description = "demo-server: axum + diesel + PostgreSQL demo";
+  description = "ref-server: axum + diesel + PostgreSQL reference implementation";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";

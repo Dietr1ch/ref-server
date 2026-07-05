@@ -58,7 +58,7 @@
   }; # ..env
 
   enterShell = ''
-    echo "🦀 demo-server dev shell"
+    echo "🦀 ref-server dev shell"
     echo "   LISTEN_SOCKET=$LISTEN_SOCKET"
     echo ""
     echo "Run: devenv processes up  # start the services"

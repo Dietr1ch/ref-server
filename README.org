@@ -1,11 +1,11 @@
-#+title: Demo webserver
-#+subtitle: axum + diesel + PostgreSQL demo
+#+title: ref-server
+#+subtitle: axum + diesel + PostgreSQL reference implementation
 #+author: Dietr1ch
 
 A minimal but complete Rust web server built with [[https://axum.rs][axum]] and
-[[https://diesel.rs][Diesel]], backed by PostgreSQL.  Intended as a reference
-for project scaffolding: Nix dev shell, database migrations, structured logging,
-and a clean REST API.
+[[https://diesel.rs][Diesel]] (via [[https://docs.rs/diesel-async][diesel-async]]),
+backed by PostgreSQL.  Intended as a reference for project scaffolding:
+Nix dev shell, async database migrations, structured logging, and a clean REST API.
 
 * Prerequisites
 
@@ -65,7 +65,7 @@ All endpoints return JSON.  Errors follow the shape ~{"error": "message"}~.
 The headings below are live requests — open this file in Emacs with ~verb-mode~
 and press ~, r r~ (~C-c C-r C-r~) while on any of them to send the request.
 
-** demo-server                                                        :verb:
+** ref-server                                                         :verb:
 template http://localhost:3000
 
 *** Health check
@@ -87,11 +87,11 @@ Content-Type: application/json
 
 The application reads these environment variables:
 
-| Variable        | Default                            | Description                  |
-|-----------------+------------------------------------+------------------------------|
-| ~DATABASE_URL~  | ~postgres://localhost:5432/demo~   | PostgreSQL connection string |
-| ~LISTEN_SOCKET~ | ~0.0.0.0:3000~                     | Socket address to listen on  |
-| ~RUST_LOG~      | ~demo_server=info,tower_http=info~ | Tracing/logging filter       |
+| Variable        | Default                           | Description                  |
+|-----------------+-----------------------------------+------------------------------|
+| ~DATABASE_URL~  | ~postgres://localhost:5432/demo~  | PostgreSQL connection string |
+| ~LISTEN_SOCKET~ | ~0.0.0.0:3000~                    | Socket address to listen on  |
+| ~RUST_LOG~      | ~ref_server=info,tower_http=info~ | Tracing/logging filter       |
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
 

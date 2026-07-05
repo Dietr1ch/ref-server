@@ -276,25 +276,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "demo-server"
-version = "0.1.0"
-dependencies = [
- "axum",
- "chrono",
- "clap",
- "diesel",
- "diesel_migrations",
- "eyre",
- "serde",
- "serde_json",
- "tokio",
- "tower-http",
- "tracing",
- "tracing-subscriber",
- "uuid",
-]
-
-[[package]]
 name = "diesel"
 version = "2.3.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -810,6 +791,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed2bf2547551a7053d6fdfafda3f938979645c44812fbfcda098faae3f1a362d"
 dependencies = [
  "bitflags",
+]
+
+[[package]]
+name = "ref-server"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "chrono",
+ "clap",
+ "diesel",
+ "diesel_migrations",
+ "eyre",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tower-http",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
 ]
 
 [[package]]

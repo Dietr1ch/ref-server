@@ -5,7 +5,7 @@ use diesel_migrations::{MigrationHarness, embed_migrations};
 use eyre::Context;
 use tracing_subscriber::EnvFilter;
 
-use demo_server::routes;
+use ref_server::routes;
 
 /// Embedded Diesel migrations (run automatically on startup).
 const MIGRATIONS: diesel_migrations::EmbeddedMigrations = embed_migrations!("migrations");
@@ -13,9 +13,9 @@ const MIGRATIONS: diesel_migrations::EmbeddedMigrations = embed_migrations!("mig
 /// Configuration read from environment variables.
 #[derive(Parser)]
 #[command(
-	name = "demo-server",
+	name = "ref-server",
 	version,
-	about = "axum + diesel + PostgreSQL demo"
+	about = "axum + diesel + PostgreSQL reference implementation"
 )]
 struct Config {
 	/// PostgreSQL connection string.
@@ -27,7 +27,7 @@ struct Config {
 	listen_socket: String,
 
 	/// Tracing/logging filter.
-	#[arg(env = "RUST_LOG", default_value = "demo_server=info,tower_http=info")]
+	#[arg(env = "RUST_LOG", default_value = "ref_server=info,tower_http=info")]
 	rust_log: String,
 }
 

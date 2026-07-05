@@ -1,4 +1,4 @@
-# justfile for demo-server
+# justfile for ref-server
 # see https://just.systems/man/en/
 
 
