@@ -1,10 +1,6 @@
 # justfile for demo-server
 # see https://just.systems/man/en/
 
-export DATABASE_URL := env_var_or_default("DATABASE_URL", "postgres://demo:demo@localhost:5432/demo")
-export LISTEN_SOCKET	:= env_var_or_default("LISTEN_SOCKET", "0.0.0.0:3000")
-
-
 
 # Meta
 # ====
@@ -17,13 +13,6 @@ default:
 
 # Database
 # ========
-
-# Create the database and run migrations
-setup: db-create migrate
-
-# Create the database (idempotent)
-db-create:
-	diesel setup
 
 # Run pending migrations
 migrate:

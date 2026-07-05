@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   languages = {
@@ -17,20 +17,18 @@
       # Pin PostgreSQL version to avoid surprises when nixpkgs bumps the default
       package = pkgs.postgresql_18_jit;
 
-      # Avoid :5432 as the system might be running Postgres
+      # Listen on Unix socket only (default) — diesel connects via $PGHOST
+      listen_addresses = "";
+
+      # Port number is used to generate the socket name, make it deterministic.
+      # The system might be running Postgres and make this pick :5432 or :5433 on some systems
       port = 35432;
 
       initialDatabases = [
         {
           name = "demo";
-
-          user = "demo";
-          pass = "demo";
         }
       ];
-      initialScript = ''
-        CREATE USER demo WITH PASSWORD 'demo';
-      '';
     }; # ..services.postgres
   }; # ..services
 
@@ -49,24 +47,20 @@
   ]; # ..packages
 
   env = {
-    # Application config
-    "DATABASE_URL" = "postgres://demo:demo@localhost:5432/demo";
+    "DATABASE_URL" = "postgresql://${config.env."PGDATABASE"}?host=${config.env."PGHOST"}";
     "LISTEN_SOCKET" = "0.0.0.0:3000";
 
     # psql/libpq defaults — so `psql` connects to the project database.
     # PGHOST and PGPORT are set automatically by devenv's postgres service.
-    "PGUSER" = "demo";
     "PGDATABASE" = "demo";
-    "PGPASSWORD" = "demo";
   }; # ..env
 
   enterShell = ''
     echo "🦀 demo-server dev shell"
-    echo "   DATABASE_URL=$DATABASE_URL"
     echo "   LISTEN_SOCKET=$LISTEN_SOCKET"
     echo ""
-    echo "Run: just run      # start the server"
-    echo "     just setup     # run diesel setup (idempotent)"
-    echo "     psql           # connect to the demo database"
+    echo "Run: devenv processes up  # start the services"
+    echo "     psql                 # connect to the demo database"
+    echo "     just run             # start the server"
   '';
 }
