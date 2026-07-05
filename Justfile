@@ -63,7 +63,7 @@ lint:
 # Format Rust and Nix code
 fmt:
 	cargo fmt
-	nixpkgs-fmt *.nix
+	nixfmt --strict *.nix
 
 # Format code, then check it still compiles
 fmt-check: fmt check

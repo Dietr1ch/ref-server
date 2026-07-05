@@ -39,7 +39,7 @@
     just
 
     # Nix
-    nixpkgs-fmt
+    nixfmt
 
     # Rust (./rust-toolchain.toml)
   ]; # ..packages
