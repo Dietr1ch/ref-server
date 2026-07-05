@@ -130,3 +130,9 @@ Run ~just~ (no arguments) to see the full list.
 
 This project is distributed under the terms of the MIT license.
 See the LICENSE file (if present) for details.
+
+
+* Meta                                                              :ARCHIVE:
+# Local Variables:
+# eval: (verb-mode)
+# End:
