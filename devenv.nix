@@ -15,16 +15,21 @@
       enable = true;
 
       # Pin PostgreSQL version to avoid surprises when nixpkgs bumps the default
-      package = pkgs.postgresql_16;
+      package = pkgs.postgresql_18_jit;
+
+      # Avoid :5432 as the system might be running Postgres
+      port = 35432;
 
       initialDatabases = [
         {
           name = "demo";
+
+          user = "demo";
+          pass = "demo";
         }
       ];
       initialScript = ''
         CREATE USER demo WITH PASSWORD 'demo';
-        GRANT ALL ON DATABASE demo TO demo;
       '';
     }; # ..services.postgres
   }; # ..services
