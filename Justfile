@@ -46,7 +46,7 @@ run:
 	cargo run
 
 # Run `cargo check` (fast compilation check)
-check:
+check: fmt
 	cargo check
 
 build:
@@ -64,9 +64,6 @@ lint:
 fmt:
 	cargo fmt
 	nixfmt --strict *.nix
-
-# Format code, then check it still compiles
-fmt-check: fmt check
 
 # Open Rust docs for dependencies
 doc:
