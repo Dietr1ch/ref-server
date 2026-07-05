@@ -6,7 +6,7 @@
 # ====
 
 # Show available recipes
-default:
+default: check
 	@just --list
 
 
