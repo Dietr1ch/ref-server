@@ -99,8 +99,12 @@ Variables can be set in a ~.env~ file (loaded automatically on startup).
 
 ** Project layout
 
-- ~src/routes/mod.rs~ — axum router and all handlers
 - ~src/bin/server.rs~ — entry point, logging, connection pool, auto-migrations
+- ~src/lib.rs~ — crate root, re-exports modules, defines shared types (~DbPool~)
+- ~src/error.rs~ — unified ~AppError~ type and ~IntoResponse~ impl
+- ~src/routes/mod.rs~ — axum router; delegates to per-resource handler modules
+  - ~src/routes/health.rs~ — health-check endpoint
+  - ~src/routes/user.rs~ — user CRUD handlers
 - ~src/models/~
   - ~src/models/mod.rs~ — module root
   - ~src/models/user.rs~ — Diesel model structs (~User~, ~NewUser~)
