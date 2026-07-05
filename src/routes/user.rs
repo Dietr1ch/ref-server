@@ -7,8 +7,8 @@ use diesel::prelude::*;
 use uuid::Uuid;
 
 use crate::DbPool;
+use crate::error::AppError;
 use crate::models::user::{NewUser, User};
-use crate::routes::AppError;
 
 /// GET /users — list all users.
 pub async fn list_users(State(pool): State<DbPool>) -> Result<Json<Vec<User>>, AppError> {

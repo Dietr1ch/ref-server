@@ -1,5 +1,6 @@
 pub mod models;
 pub mod routes;
+pub mod error;
 pub mod schema;
 
 use diesel::prelude::*;
