@@ -98,6 +98,21 @@ async fn health_returns_200() {
 // User CRUD
 // =========
 #[tokio::test]
+async fn list_users_empty_returns_empty_array() {
+	let app = test_app().await;
+
+	let response = app
+		.oneshot(Request::get("/users").body(Body::empty()).unwrap())
+		.await
+		.unwrap();
+
+	assert_that!(response.status(), eq(StatusCode::OK));
+
+	let list: serde_json::Value = response_json(response).await;
+	assert_that!(list, eq(&serde_json::json!([])));
+}
+
+#[tokio::test]
 async fn create_and_list_and_get_user() {
 	let app = test_app().await;
 

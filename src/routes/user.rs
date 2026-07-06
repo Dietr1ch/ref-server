@@ -75,7 +75,7 @@ pub async fn list_users(
 	let columns = select_clause(params.fields.as_deref());
 
 	let sql = format!(
-		"SELECT jsonb_agg(to_jsonb(t))::text AS data \
+		"SELECT COALESCE(jsonb_agg(to_jsonb(t)), '[]'::jsonb)::text AS data \
 		 FROM (SELECT {columns} FROM users) t",
 	);
 
