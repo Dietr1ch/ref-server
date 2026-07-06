@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use clap::Parser;
 use diesel::Connection;
 use diesel::pg::PgConnection;
@@ -21,17 +23,32 @@ const MIGRATIONS: diesel_migrations::EmbeddedMigrations = embed_migrations!("mig
 	about = "axum + diesel + PostgreSQL reference implementation"
 )]
 struct Config {
-	/// PostgreSQL connection string.
+	// Database
+	/// Postgres connection string
 	#[arg(env = "DATABASE_URL")]
 	database_url: String,
+	/// Whether to run migrations during startup
 	#[arg(long)]
 	database_run_migrations: bool,
 
+	/// The connection timeout
+	#[arg(
+    long,
+    default_value = "5s",
+    value_parser = humantime::parse_duration
+	)]
+	database_connect_timeout: Duration,
+	/// The pool size
+	#[arg(long, default_value = "8")]
+	database_pool_size: u32,
+
+	// Server
 	/// Socket address (host:port) to listen on.
 	#[arg(env = "LISTEN_SOCKET", default_value = "0.0.0.0:3000")]
 	listen_socket: String,
 
-	/// Tracing/logging filter.
+	// Logging
+	/// Tracing filter.
 	#[arg(env = "RUST_LOG", default_value = "ref_server=info,tower_http=info")]
 	rust_log: String,
 }
@@ -50,7 +67,8 @@ async fn main() -> eyre::Result<()> {
 	let connection_config =
 		AsyncDieselConnectionManager::<AsyncPgConnection>::new(&config.database_url);
 	let pool = Pool::builder()
-		.connection_timeout(std::time::Duration::from_secs(5))
+		.max_size(config.database_pool_size)
+		.connection_timeout(config.database_connect_timeout)
 		.build(connection_config)
 		.await
 		.wrap_err("Failed to build connection pool")?;

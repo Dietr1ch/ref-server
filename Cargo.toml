@@ -20,6 +20,7 @@ clap = { version = "4", features = ["derive", "env"] }
 eyre = "0.6"
 uuid = { version = "1", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
+humantime = "2"
 
 [dev-dependencies]
 googletest = "0.14"
