@@ -24,6 +24,8 @@ struct Config {
 	/// PostgreSQL connection string.
 	#[arg(env = "DATABASE_URL")]
 	database_url: String,
+	#[arg(long)]
+	database_run_migrations: bool,
 
 	/// Socket address (host:port) to listen on.
 	#[arg(env = "LISTEN_SOCKET", default_value = "0.0.0.0:3000")]
@@ -56,7 +58,7 @@ async fn main() -> eyre::Result<()> {
 	// Uses sync Diesel/libpq (spawn_blocking) rather than tokio-postgres because
 	// tokio-postgres parses the connection URL differently from libpq, which can
 	// cause failures with Unix-socket-based connection strings.
-	{
+	if config.database_run_migrations {
 		let database_url = config.database_url.clone();
 		tokio::task::spawn_blocking(move || {
 			let mut conn = PgConnection::establish(&database_url)
