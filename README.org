@@ -61,11 +61,11 @@ and press ~, r r~ (~C-c C-r C-r~) while on any of them to send the request.
 
 The application reads these environment variables:
 
-| Variable        | Default                               | Description                  |
-|-----------------+---------------------------------------+------------------------------|
-| ~DATABASE_URL~  | ~postgres://localhost:5432/demo~      | PostgreSQL connection string |
-| ~LISTEN_SOCKET~ | ~0.0.0.0:3000~                        | Socket address to listen on  |
-| ~SERVER_LOG~    | ~debug,server=trace,ref_server=trace~ | Tracing/logging filter       |
+| Variable        | Description                  |
+|-----------------+------------------------------|
+| ~DATABASE_URL~  | PostgreSQL connection string |
+| ~LISTEN_SOCKET~ | Socket address to listen on  |
+| ~SERVER_LOG~    | Tracing/logging filter       |
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
 
