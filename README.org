@@ -80,6 +80,8 @@ Variables can be set in a ~.env~ file (loaded automatically on startup).
 
 - ~docs/~
   - ~api/~
+  - ~db/~
+  - ~web/~
 - ~migrations/~ :: SQL migration files
 - ~src/~
   - ~lib.rs~

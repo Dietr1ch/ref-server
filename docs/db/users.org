@@ -1,0 +1,27 @@
+#+name: Users
+
+The Users for this system
+
+* Definition
+
+#+begin_src sql
+create table users (
+  id uuid primary key default uuid_generate_v4(),
+  name varchar(255) not null,
+  email varchar(255) not null unique,
+  created_at timestamptz not null default now()
+);
+#+end_src
+
+* Queries
+
+** Raw table
+#+begin_src sql :engine postgres
+  select *
+  from users
+  limit 10
+#+end_src
+
+#+RESULTS:
+| id | name | email | created_at |
+|----+------+-------+------------|

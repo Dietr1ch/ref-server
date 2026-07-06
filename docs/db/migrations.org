@@ -1,0 +1,18 @@
+#+name: Migrations
+
+Diesel keeps a table tracking the migrations performed.
+
+* Queries
+
+** Raw table
+#+begin_src sql :engine postgres
+  select *
+  from __diesel_schema_migrations
+  limit 10
+#+end_src
+
+#+RESULTS:
+|        version | run_on                     |
+|----------------+----------------------------|
+| 00000000000000 | 2026-07-05 16:55:06.872526 |
+| 20260704000001 | 2026-07-05 16:55:06.874517 |
