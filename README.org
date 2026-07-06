@@ -14,15 +14,16 @@ Nix dev shell, async database migrations, structured logging, and a clean REST A
 
 * Quick start
 
-** 1. Start PostgreSQL
+** 1. Start background services
 
 #+begin_src fish
   devenv processes up
 #+end_src
 
-This starts PostgreSQL as a background service (along with any other configured
-processes).  Press ~Ctrl+C~ to stop.  If you prefer to run PostgreSQL yourself,
-set ~services.postgres.enable = false~ in ~devenv.nix~.
+This starts,
+- PostgreSQL
+
+Press ~Ctrl+C~ to stop.
 
 ** 2. Create the database
 
