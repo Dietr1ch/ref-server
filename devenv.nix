@@ -44,6 +44,9 @@
     bacon
     just
 
+    # LSP
+    vscode-langservers-extracted
+
     # Web server
     static-web-server
 
