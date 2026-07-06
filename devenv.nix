@@ -60,6 +60,7 @@
   enterShell = ''
     echo "🦀 ref-server dev shell"
     echo "   LISTEN_SOCKET=$LISTEN_SOCKET"
+    echo "   DATABASE_URL=$DATABASE_URL"
     echo ""
     echo "Run: devenv processes up  # start the services"
     echo "     psql                 # connect to the demo database"
