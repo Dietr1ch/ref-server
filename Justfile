@@ -54,11 +54,11 @@ build:
 
 # Run all tests (requires `devenv processes up` for integration tests)
 test:
-	cargo test
+	cargo nextest run
 
 # Run fast unit tests (no database needed)
 test-unit:
-	cargo test --lib
+	cargo nextest run --lib
 
 # Run clippy lints
 lint:
