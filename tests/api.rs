@@ -123,13 +123,7 @@ async fn create_and_list_and_get_user() {
 
 	assert_that!(list_response.status(), eq(StatusCode::OK));
 	let list: serde_json::Value = response_json(list_response).await;
-	let expected_list = serde_json::json!([{
-		"id": user_id.to_string(),
-		"name": "Alice",
-		"email": "alice@example.com",
-		"created_at": created.get("created_at").unwrap().clone(),
-	}]);
-	assert_that!(list, eq(&expected_list));
+	assert_that!(list, eq(&serde_json::json!([{"id": user_id.to_string()}])));
 
 	// Get user by ID
 	let get_response = app
@@ -153,6 +147,92 @@ async fn create_and_list_and_get_user() {
 			PgConnection::establish(&database_url).expect("Failed to connect for cleanup");
 		diesel::sql_query("DELETE FROM users WHERE id = $1")
 			.bind::<diesel::sql_types::Uuid, _>(user_id)
+			.execute(&mut conn)
+			.expect("Failed to clean up test user");
+	})
+	.await
+	.unwrap();
+}
+
+#[tokio::test]
+async fn list_users_with_fields() {
+	let app = test_app().await;
+
+	// Create a user so we have something to list.
+	let create_body = serde_json::json!({
+		"name": "Bob",
+		"email": "bob-fields@example.com",
+	});
+	let response = app
+		.clone()
+		.oneshot(
+			Request::post("/users")
+				.header("Content-Type", "application/json")
+				.body(Body::from(serde_json::to_vec(&create_body).unwrap()))
+				.unwrap(),
+		)
+		.await
+		.unwrap();
+	assert_that!(response.status(), eq(StatusCode::CREATED));
+	let created: serde_json::Value = response_json(response).await;
+	let user_id = created
+		.get("id")
+		.and_then(|v| v.as_str())
+		.unwrap()
+		.to_owned();
+
+	// Only request the `id` field
+	let r = app
+		.clone()
+		.oneshot(
+			Request::get("/users?fields=id")
+				.body(Body::empty())
+				.unwrap(),
+		)
+		.await
+		.unwrap();
+	assert_that!(r.status(), eq(StatusCode::OK));
+	let list: serde_json::Value = response_json(r).await;
+	assert_that!(list, eq(&serde_json::json!([{"id": user_id}])));
+
+	// Request `id` and `name`
+	let r = app
+		.clone()
+		.oneshot(
+			Request::get("/users?fields=id,name")
+				.body(Body::empty())
+				.unwrap(),
+		)
+		.await
+		.unwrap();
+	assert_that!(r.status(), eq(StatusCode::OK));
+	let list: serde_json::Value = response_json(r).await;
+	assert_that!(
+		list,
+		eq(&serde_json::json!([{"id": user_id, "name": "Bob"}]))
+	);
+
+	// Request an unknown field (id is always included)
+	let r = app
+		.clone()
+		.oneshot(
+			Request::get("/users?fields=nonexistent")
+				.body(Body::empty())
+				.unwrap(),
+		)
+		.await
+		.unwrap();
+	assert_that!(r.status(), eq(StatusCode::OK));
+	let list: serde_json::Value = response_json(r).await;
+	assert_that!(list, eq(&serde_json::json!([{"id": user_id}])));
+
+	// Cleanup
+	let database_url = std::env::var("DATABASE_URL").unwrap();
+	tokio::task::spawn_blocking(move || {
+		let mut conn =
+			PgConnection::establish(&database_url).expect("Failed to connect for cleanup");
+		diesel::sql_query("DELETE FROM users WHERE id = $1")
+			.bind::<diesel::sql_types::Uuid, _>(user_id.parse::<Uuid>().unwrap())
 			.execute(&mut conn)
 			.expect("Failed to clean up test user");
 	})
