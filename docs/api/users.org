@@ -7,7 +7,7 @@ Tests,
 
 
 * /users                                                               :verb:
-template http://localhost:3000
+template http://localhost:3001
 
 ** List users
 get /users

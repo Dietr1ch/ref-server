@@ -44,7 +44,7 @@ struct Config {
 
 	// Server
 	/// Socket address (host:port) to listen on.
-	#[arg(env = "LISTEN_SOCKET", default_value = "0.0.0.0:3000")]
+	#[arg(env = "API_LISTEN_SOCKET", default_value = "0.0.0.0:3001")]
 	listen_socket: String,
 }
 

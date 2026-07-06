@@ -7,7 +7,7 @@ Tests,
 
 
 * /health                                                              :verb:
-template http://localhost:3000
+template http://localhost:3001
 
 ** Health check
 get /health

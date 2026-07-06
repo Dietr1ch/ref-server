@@ -1,0 +1,25 @@
+#+name: / API
+
+A static web server.
+
+Directory,
+- [[../../assets/][:/assets/]]
+
+
+* /                                                                    :verb:
+template http://localhost:3000
+
+** Root Index
+get /
+
+** Faux /health
+get /health
+
+** Faux /health HTML index
+get /health/index.html
+
+
+* Misc                                                              :ARCHIVE:
+# Local Variables:
+# eval: (verb-mode)
+# End:

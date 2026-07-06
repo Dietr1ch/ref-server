@@ -1,0 +1,9 @@
+# static-web-server configuration for the Web Server
+#
+# References,
+# - https://static-web-server.net/configuration/config-file/
+
+
+[general]
+host = "::"
+root = "./assets"

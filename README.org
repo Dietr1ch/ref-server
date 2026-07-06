@@ -23,7 +23,8 @@ Nix dev shell, async database migrations, structured logging, and a clean REST A
 #+end_src
 
 This starts,
-- PostgreSQL
+- PostgreSQL listening on a Unix socket (~$DATABASE_URL~)
+- static-web-server listening on ~$WEB_LISTEN_SOCKET:=localhost:3000~
 
 Press ~Ctrl+C~ to stop.
 
@@ -42,7 +43,7 @@ pending migrations.
   just run
 #+end_src
 
-The server listens on ~$LISTEN_SOCKET:="0.0.0.0:3000"~.
+The API server listens on ~$API_LISTEN_SOCKET:="0.0.0.0:3001"~.
 
 ** 4. Try it out
 Open this file in Emacs with ~verb-mode~ enabled, then place point on any
@@ -65,11 +66,12 @@ C-r C-r~) while on any of them to send the request.
 
 The application reads these environment variables:
 
-| Variable        | Description                  |
-|-----------------+------------------------------|
-| ~DATABASE_URL~  | PostgreSQL connection string |
-| ~LISTEN_SOCKET~ | Socket address to listen on  |
-| ~SERVER_LOG~    | Tracing/logging filter       |
+| Variable            | Description                                |
+|---------------------+--------------------------------------------|
+| ~DATABASE_URL~      | PostgreSQL connection string               |
+| ~WEB_LISTEN_SOCKET~ | Socket address to listen on for static Web |
+| ~API_LISTEN_SOCKET~ | Socket address to listen on the API server |
+| ~SERVER_LOG~        | Tracing/logging filter                     |
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
 
