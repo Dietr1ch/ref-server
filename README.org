@@ -1,6 +1,6 @@
 #+title: ref-server
 #+subtitle: axum + diesel + PostgreSQL reference implementation
-#+author: Dietr1ch
+#+author: Dietrich Daroch
 
 A minimal but complete Rust web server built with [[https://axum.rs][axum]] and
 [[https://diesel.rs][Diesel]] (via [[https://docs.rs/diesel-async][diesel-async]]),
