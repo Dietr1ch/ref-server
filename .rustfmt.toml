@@ -1,4 +1,7 @@
 # https://rust-lang.github.io/rustfmt/
 
-# https://rust-lang.github.io/rustfmt#hard_tabs
+# https://github.com/rust-lang/rustfmt/tree/main/Configurations.md#edition
+edition = "2024"
+
+# https://github.com/rust-lang/rustfmt/tree/main/Configurations.md#hard_tabs
 hard_tabs = true

@@ -8,3 +8,8 @@ walk = "git"
 [formatter.nix]
 command = "nixfmt"
 includes = ["*.nix"]
+
+[formatter.rust]
+command = "rustfmt"
+options = ["--config-path", ".rustfmt.toml"]
+includes = ["*.rs"]
