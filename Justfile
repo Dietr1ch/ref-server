@@ -14,6 +14,10 @@ default: check
 # Database
 # ========
 
+# Initialise diesel
+setup:
+	diesel setup
+
 # Run pending migrations
 migrate:
 	diesel migration run
