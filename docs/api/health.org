@@ -1,0 +1,11 @@
+#+name: /health API
+
+Code,
+- [[../../src/routes/health.rs][:/src/routes/health.rs]]
+
+
+* /health                                                              :verb:
+template http://localhost:3000
+
+** Health check
+get /health

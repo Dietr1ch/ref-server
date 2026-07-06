@@ -1,0 +1,34 @@
+#+name: /users API
+
+Code,
+- [[../../src/routes/user.rs][:/src/routes/user.rs]]
+
+
+* /users                                                               :verb:
+template http://localhost:3000
+
+** List users
+get /users
+
+Returns user objects.  The primary key ~id~ is always included; use
+~?fields~ to request additional columns:
+
+#+begin_src text
+  GET /users
+  # → [{"id": "…"}, …]
+
+  GET /users?fields=name
+  # → [{"id": "…", "name": "…"}, …]
+
+  GET /users?fields=name,email
+  # → [{"id": "…", "name": "…", "email": "…"}, …]
+#+end_src
+
+** Get user
+get /users/<uuid>
+
+** Create user
+post /users
+Content-Type: application/json
+
+{"name": "Alice", "email": "alice@example.com"}

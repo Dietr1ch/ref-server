@@ -53,37 +53,9 @@ All endpoints return JSON.  Errors follow the shape ~{"error": "message"}~.
 The headings below are live requests — open this file in Emacs with ~verb-mode~
 and press ~, r r~ (~C-c C-r C-r~) while on any of them to send the request.
 
-** ref-server                                                         :verb:
-template http://localhost:3000
+- [[./docs/api/health.org][/health]]
+- [[./docs/api/users.org][/users]]
 
-*** Health check
-get /health
-
-*** List users
-get /users
-
-Returns user objects.  The primary key ~id~ is always included; use
-~?fields~ to request additional columns:
-
-#+begin_src text
-  GET /users
-  # → [{"id": "…"}, …]
-
-  GET /users?fields=name
-  # → [{"id": "…", "name": "…"}, …]
-
-  GET /users?fields=name,email
-  # → [{"id": "…", "name": "…", "email": "…"}, …]
-#+end_src
-
-*** Get user
-get /users/<uuid>
-
-*** Create user
-post /users
-Content-Type: application/json
-
-{"name": "Alice", "email": "alice@example.com"}
 
 * Configuration
 
@@ -138,9 +110,3 @@ Run ~just~ (no arguments) to see the full list.
 
 This project is distributed under the terms of the MIT license.
 See the LICENSE file (if present) for details.
-
-
-* Meta                                                              :ARCHIVE:
-# Local Variables:
-# eval: (verb-mode)
-# End:
