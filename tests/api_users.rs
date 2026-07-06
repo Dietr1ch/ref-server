@@ -1,3 +1,9 @@
+/// Integration tests for the /users API
+///
+/// Code,
+/// - :/src/routes/users.rs
+/// Docs,
+/// - :/docs/api/users.org
 use axum::body::Body;
 use axum::http::{Request, StatusCode};
 use googletest::prelude::*;

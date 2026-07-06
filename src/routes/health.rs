@@ -1,3 +1,10 @@
+/// Implementation for the /health API
+///
+/// Docs,
+/// - :/docs/api/health.org
+///
+/// Relevant integration tests,
+/// - :/tests/api_health.rs
 use axum::Json;
 use serde_json::json;
 

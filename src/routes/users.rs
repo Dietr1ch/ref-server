@@ -1,3 +1,10 @@
+/// Implementation for the /users API
+///
+/// Docs,
+/// - :/docs/api/users.org
+///
+/// Relevant integration tests,
+/// - :/tests/api_users.rs
 use axum::{
 	Json,
 	extract::{Path, Query, State},

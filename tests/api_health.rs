@@ -1,3 +1,9 @@
+/// Integration tests for the /health API
+///
+/// Code,
+/// - :/src/routes/health.rs
+/// Docs,
+/// - :/docs/api/health.org
 use axum::body::Body;
 use axum::http::{Request, StatusCode};
 use googletest::prelude::*;
