@@ -45,7 +45,9 @@
   ]; # ..packages
 
   env = {
-    "DATABASE_URL" = "postgresql://${config.env."PGDATABASE"}?host=${config.env."PGHOST"}";
+    "DATABASE_URL" =
+      "postgresql:///${config.env."PGDATABASE"}?host=${config.env."PGHOST"}&port=${toString config.services.postgres.port}";
+
     "LISTEN_SOCKET" = "0.0.0.0:3000";
 
     # psql/libpq defaults — so `psql` connects to the project database.

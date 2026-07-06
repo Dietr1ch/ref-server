@@ -50,6 +50,7 @@ async fn main() -> eyre::Result<()> {
 	let connection_config =
 		AsyncDieselConnectionManager::<AsyncPgConnection>::new(&config.database_url);
 	let pool = Pool::builder()
+		.connection_timeout(std::time::Duration::from_secs(5))
 		.build(connection_config)
 		.await
 		.wrap_err("Failed to build connection pool")?;
