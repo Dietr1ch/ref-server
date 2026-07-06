@@ -101,11 +101,11 @@ Content-Type: application/json
 
 The application reads these environment variables:
 
-| Variable        | Default                           | Description                  |
-|-----------------+-----------------------------------+------------------------------|
-| ~DATABASE_URL~  | ~postgres://localhost:5432/demo~  | PostgreSQL connection string |
-| ~LISTEN_SOCKET~ | ~0.0.0.0:3000~                    | Socket address to listen on  |
-| ~RUST_LOG~      | ~ref_server=info,tower_http=info~ | Tracing/logging filter       |
+| Variable        | Default                               | Description                  |
+|-----------------+---------------------------------------+------------------------------|
+| ~DATABASE_URL~  | ~postgres://localhost:5432/demo~      | PostgreSQL connection string |
+| ~LISTEN_SOCKET~ | ~0.0.0.0:3000~                        | Socket address to listen on  |
+| ~SERVER_LOG~    | ~debug,server=trace,ref_server=trace~ | Tracing/logging filter       |
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
 

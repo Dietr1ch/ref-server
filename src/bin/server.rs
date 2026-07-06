@@ -46,11 +46,6 @@ struct Config {
 	/// Socket address (host:port) to listen on.
 	#[arg(env = "LISTEN_SOCKET", default_value = "0.0.0.0:3000")]
 	listen_socket: String,
-
-	// Logging
-	/// Tracing filter.
-	#[arg(env = "RUST_LOG", default_value = "ref_server=info,tower_http=info")]
-	rust_log: String,
 }
 
 #[tokio::main]
@@ -59,7 +54,7 @@ async fn main() -> eyre::Result<()> {
 
 	// Structured logging
 	tracing_subscriber::fmt()
-		.with_env_filter(EnvFilter::new(&config.rust_log))
+		.with_env_filter(EnvFilter::from_env("SERVER_LOG"))
 		.init();
 
 	// Database
