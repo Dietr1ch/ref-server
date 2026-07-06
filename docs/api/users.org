@@ -34,3 +34,9 @@ post /users
 Content-Type: application/json
 
 {"name": "Alice", "email": "alice@example.com"}
+
+
+* Misc                                                              :ARCHIVE:
+# Local Variables:
+# eval: (verb-mode)
+# End:

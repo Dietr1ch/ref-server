@@ -11,3 +11,9 @@ template http://localhost:3000
 
 ** Health check
 get /health
+
+
+* Misc                                                              :ARCHIVE:
+# Local Variables:
+# eval: (verb-mode)
+# End:
