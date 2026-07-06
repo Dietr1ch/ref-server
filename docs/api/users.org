@@ -1,7 +1,7 @@
 #+name: /users API
 
 Code,
-- [[../../src/routes/user.rs][:/src/routes/user.rs]]
+- [[../../src/routes/users.rs][:/src/routes/users.rs]]
 Tests,
 - [[../../tests/api_users.rs][:/tests/api_users.rs]]
 

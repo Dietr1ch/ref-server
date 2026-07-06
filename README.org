@@ -92,7 +92,7 @@ Variables can be set in a ~.env~ file (loaded automatically on startup).
 - ~tests/~
   - ~common/~ — Test utilities
   - ~api_health.rs~ — Test for ~/health~ API
-  - ~api_user.rs~ — Test for ~/users~ API
+  - ~api_users.rs~ — Test for ~/users~ API
 - ~devenv.nix~ / ~devenv.yaml~ — [[https://devenv.sh][devenv]] configuration (Rust, PostgreSQL, packages)
 - ~flake.nix~ — Nix flake entry point, delegates to ~devenv~
 - ~Justfile~ — common task runner commands

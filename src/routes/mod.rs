@@ -1,5 +1,5 @@
 mod health;
-mod user;
+mod users;
 
 use axum::Router;
 use axum::routing::get;
@@ -13,7 +13,7 @@ use crate::DbPool;
 pub fn router(pool: DbPool) -> Router {
 	Router::new()
 		.route("/health", get(health::health))
-		.route("/users", get(user::list_users).post(user::create_user))
-		.route("/users/{id}", get(user::get_user))
+		.route("/users", get(users::list_users).post(users::create_user))
+		.route("/users/{id}", get(users::get_user))
 		.with_state(pool)
 }
