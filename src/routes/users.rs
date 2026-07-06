@@ -95,8 +95,8 @@ pub async fn list_users(
 		.await
 		.map_err(|e| AppError::internal(format!("{e}")))?;
 
-	let items: Vec<serde_json::Value> = serde_json::from_str(&row.data)
-		.map_err(|e| AppError::internal(format!("{e}")))?;
+	let items: Vec<serde_json::Value> =
+		serde_json::from_str(&row.data).map_err(|e| AppError::internal(format!("{e}")))?;
 
 	Ok(Json(items))
 }
