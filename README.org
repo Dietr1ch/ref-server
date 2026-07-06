@@ -7,10 +7,12 @@ A minimal but complete Rust web server built with [[https://axum.rs][axum]] and
 backed by PostgreSQL.  Intended as a reference for project scaffolding:
 Nix dev shell, async database migrations, structured logging, and a clean REST API.
 
+
 * Prerequisites
 
 - [[https://nixos.org/download][Nix]] with flakes enabled
 - ~direnv~ to automatically enter the right environment
+
 
 * Quick start
 
@@ -47,8 +49,8 @@ Open this file in Emacs with ~verb-mode~ enabled, then place point on any
 heading under the [[*API reference][API reference]] section below and press ~C-c C-r C-r~
 to send the request.
 
-* API reference
 
+* API reference
 All endpoints return JSON.  Errors follow the shape ~{"error": "message"}~.
 
 The headings in the API docs can be queried using ~verb-mode~. Use ~, r r~ (~C-c
@@ -56,6 +58,7 @@ C-r C-r~) while on any of them to send the request.
 
 - [[./docs/api/health.org][/health]]
 - [[./docs/api/users.org][/users]]
+
 
 
 * Configuration
@@ -69,6 +72,7 @@ The application reads these environment variables:
 | ~SERVER_LOG~    | Tracing/logging filter       |
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
+
 
 * Development
 
@@ -115,6 +119,7 @@ Variables can be set in a ~.env~ file (loaded automatically on startup).
 | ~just ci~               | Full CI pipeline: check + test + lint         |
 
 Run ~just --list~ to see the full list.
+
 
 * License
 
