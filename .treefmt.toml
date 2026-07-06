@@ -4,3 +4,7 @@
 # - https://treefmt.com/latest/getting-started/configure/
 
 walk = "git"
+
+[formatter.nix]
+command = "nixfmt"
+includes = ["*.nix"]
