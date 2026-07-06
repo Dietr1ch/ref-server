@@ -10,32 +10,21 @@ Nix dev shell, async database migrations, structured logging, and a clean REST A
 * Prerequisites
 
 - [[https://nixos.org/download][Nix]] with flakes enabled
+- ~direnv~ to automatically enter the right environment
 
 * Quick start
 
-** 1. Enter the dev shell
+** 1. Start PostgreSQL
 
 #+begin_src fish
-  nix develop
-#+end_src
-
-If you use ~direnv~, this also works automatically via the included ~.envrc~.
-
-[[https://devenv.sh][devenv]] powers this shell — it provides the Rust toolchain, sets
-~DATABASE_URL~ and ~LISTEN_SOCKET~, makes ~diesel~, ~cargo~, ~just~, and ~psql~
-available, and can manage a PostgreSQL service.
-
-** 2. Start PostgreSQL
-
-#+begin_src fish
-  devenv up
+  devenv processes up
 #+end_src
 
 This starts PostgreSQL as a background service (along with any other configured
 processes).  Press ~Ctrl+C~ to stop.  If you prefer to run PostgreSQL yourself,
 set ~services.postgres.enable = false~ in ~devenv.nix~.
 
-** 3. Create the database
+** 2. Create the database
 
 #+begin_src fish
   just setup
@@ -44,7 +33,7 @@ set ~services.postgres.enable = false~ in ~devenv.nix~.
 This runs ~diesel setup~ (creates the database if missing) then applies all
 pending migrations.
 
-** 4. Start the server
+** 3. Start the server
 
 #+begin_src fish
   just run
@@ -53,7 +42,6 @@ pending migrations.
 The server listens on ~$LISTEN_SOCKET:="0.0.0.0:3000"~.
 
 ** 4. Try it out
-
 Open this file in Emacs with ~verb-mode~ enabled, then place point on any
 heading under the [[*API reference][API reference]] section below and press ~C-c C-r C-r~
 to send the request.
