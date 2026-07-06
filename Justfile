@@ -49,6 +49,7 @@ run:
 check: fmt
 	cargo check
 
+# Run `cargo build`
 build:
 	cargo build
 
@@ -73,6 +74,7 @@ fmt:
 doc:
 	cargo doc --open
 
+# Update nix flakes and cargo crates
 update:
 	nix flake update
 	cargo update
