@@ -96,10 +96,11 @@ Variables can be set in a ~.env~ file (loaded automatically on startup).
 
 | Command                 | Description                                   |
 |-------------------------+-----------------------------------------------|
-| ~devenv up~             | Start background services (DB)                |
+| ~devenv processes up~   | Start background services (DB)                |
 | ~just run~              | Start the development server                  |
 | ~just check~            | Run ~cargo check~                             |
-| ~just test~             | Run ~cargo test~                              |
+| ~just test~             | Run all tests (requires background services)  |
+| ~just test-unit~        | Run unit tests (standalone)                   |
 | ~just lint~             | Run ~cargo clippy -- -D warnings~             |
 | ~just fmt~              | Format code with ~rustfmt~                    |
 | ~just migrate~          | Run pending Diesel migrations                 |
@@ -108,7 +109,7 @@ Variables can be set in a ~.env~ file (loaded automatically on startup).
 | ~just db-clean-state~   | Nuke devenv's pg state (after version switch) |
 | ~just ci~               | Full CI pipeline: check + test + lint         |
 
-Run ~just~ (no arguments) to see the full list.
+Run ~just --list~ to see the full list.
 
 * License
 
