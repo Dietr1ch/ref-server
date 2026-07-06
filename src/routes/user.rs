@@ -49,6 +49,7 @@ fn select_clause(fields: Option<&str>) -> String {
 		}
 	}
 
+	tracing::debug!("Selecting columns: {cols:?}");
 	cols.join(", ")
 }
 
@@ -81,6 +82,7 @@ pub async fn list_users(
 
 	let mut conn = pool.get().await.map_err(AppError::internal)?;
 
+	tracing::debug!("Querying: {sql:?}");
 	let row: DataRow = diesel::sql_query(sql)
 		.get_result(&mut conn)
 		.await
