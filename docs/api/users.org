@@ -2,6 +2,8 @@
 
 Code,
 - [[../../src/routes/user.rs][:/src/routes/user.rs]]
+Tests,
+- [[../../tests/api_users.rs][:/tests/api_users.rs]]
 
 
 * /users                                                               :verb:

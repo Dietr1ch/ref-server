@@ -2,6 +2,8 @@
 
 Code,
 - [[../../src/routes/health.rs][:/src/routes/health.rs]]
+Tests,
+- [[../../tests/api_health.rs][:/tests/api_health.rs]]
 
 
 * /health                                                              :verb:
