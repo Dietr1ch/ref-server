@@ -1,0 +1,6 @@
+# The formatter multiplexer - https://github.com/numtide/treefmt
+#
+# References,
+# - https://treefmt.com/latest/getting-started/configure/
+
+walk = "git"

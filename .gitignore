@@ -17,5 +17,6 @@
 
 # Project
 !.config
+!.*.toml
 TODOs.org
 /target

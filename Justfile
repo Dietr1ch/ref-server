@@ -67,8 +67,7 @@ lint:
 
 # Format Rust and Nix code
 fmt:
-	cargo fmt
-	nixfmt --strict *.nix
+	treefmt
 
 # Open Rust docs for dependencies
 doc:

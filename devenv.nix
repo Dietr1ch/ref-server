@@ -59,6 +59,14 @@
     enable = true;
   }; # ..dotenv
 
+  git-hooks = {
+    hooks = {
+      treefmt = {
+        enable = true;
+      }; # ..git-hooks.hooks.treefmt
+    }; # ..git-hooks.hooks
+  }; # ..git-hooks
+
   enterShell = ''
     echo "🦀 ref-server dev shell"
     echo "   LISTEN_SOCKET=$LISTEN_SOCKET"
