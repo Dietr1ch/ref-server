@@ -53,6 +53,10 @@
     "PGDATABASE" = "demo";
   }; # ..env
 
+  dotenv = {
+    enable = true;
+  }; # ..dotenv
+
   enterShell = ''
     echo "🦀 ref-server dev shell"
     echo "   LISTEN_SOCKET=$LISTEN_SOCKET"
