@@ -146,6 +146,12 @@ Command line arguments override environment variables
 Run ~just --list~ to see the full list.
 
 
+* Contributing
+
+This is a reference project, but see the [[./CONTRIBUTING.org][contributing guide]] if you want
+to report an issue or adapt the conventions for your own fork.
+
+
 * License
 
 This project is distributed under the terms of the MIT license.

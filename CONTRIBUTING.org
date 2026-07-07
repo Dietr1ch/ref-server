@@ -1,0 +1,41 @@
+#+title: Contributing
+
+This is ~ref-server~, a reference project meant to be studied, forked,
+and adapted.  External contributions are not expected, but if something is
+broken or could be clearer, feel free to open an issue.
+
+If you are using this repository as a scaffold for your own project, adapt
+this file to your needs --- it is meant as a starting point.
+
+
+* Setup
+- Clone the repository.
+- Make sure the [[file:README.org::Prerequisites][prerequisites]] are met.
+- Run ~devenv processes up~ to start PostgreSQL.
+- Run ~just db-setup~ to create the database and apply migrations.
+- Run ~just test~ to verify everything works.
+
+
+* Coding conventions
+- Format code before committing: ~just fmt~ (runs ~cargo fmt~ + ~nixfmt~).
+- Run ~just lint~ (~cargo clippy -- -D warnings~) before pushing.
+- Keep the crate small.  Add dependencies sparingly.
+- Follow the project's doc style: Org-mode files with ~verb-mode~ annotations
+  for API examples.
+
+
+* How to report issues
+Open a GitHub issue with:
+- A clear description of the problem.
+- Steps to reproduce.
+- Expected vs actual behaviour.
+
+
+* Pull request process
+1. Ensure all tests pass (~just test~).
+2. Run ~just ci~ (check + test + lint) before opening.
+3. Keep changes focused --- one PR per concern.
+
+
+* Code of conduct
+Be respectful and constructive.  This is a learning resource first.
