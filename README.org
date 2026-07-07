@@ -146,6 +146,11 @@ Command line arguments override environment variables
 
 Run ~just --list~ to see the full list.
 
+** Future work
+
+See the [[./docs/future_work.org][future work doc]] for possible directions the project
+could grow and what patterns each would demonstrate.
+
 
 * Contributing
 

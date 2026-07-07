@@ -1,0 +1,39 @@
+#+title: Future work
+
+This file sketches directions the project could grow to demonstrate more
+patterns commonly needed when evolving a real-world API server.
+None of these are commitments, they serve as a shared reference for what to
+tackle next and what patterns each direction would showcase.
+
+
+* Related resource (e.g. posts with ownership)
+Demonstrates:
+- New migration with a foreign key referencing ~users.id~
+- Diesel model with ~belongs_to~ association
+- Nested routes (~/users/:id/posts~)
+- Full lifecycle: migration → model → route → handler → test → doc
+
+
+* Pagination on the users collection
+Demonstrates:
+- Evolving an existing endpoint without breaking changes
+- ~?page~ / ~?per_page~ query parameters
+- Diesel ~OFFSET~/~LIMIT~ (or keyset pagination for larger datasets)
+- Returning pagination metadata (~total~, ~next~, ~prev~)
+
+
+* Middleware (e.g. request timing)
+Demonstrates:
+- Adding tower layers to the ~axum~ router
+- Cross-cutting concerns separate from business logic
+
+
+* Background job (e.g. periodic health report)
+Demonstrates:
+- Tokio tasks alongside the HTTP server
+- The async runtime outside a request context
+
+
+* What's next
+Pick one direction, implement it, then update this file with the concrete
+patterns that emerged.
