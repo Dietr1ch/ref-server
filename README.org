@@ -22,7 +22,7 @@ Nix dev shell, async database migrations, structured logging, and a clean REST A
 ** 1. Start background services
 
 #+begin_src fish
-  devenv processes up
+  just up
 #+end_src
 
 This starts,
@@ -121,7 +121,7 @@ Command line arguments override environment variables
 
 | Command                      | Description                                      |
 |------------------------------+--------------------------------------------------|
-| ~devenv processes up~        | Start background services (DB)                   |
+| ~just up~                    | Start background services (DB)                   |
 |------------------------------+--------------------------------------------------|
 | ~just run~                   | Start the development server                     |
 | ~just check~                 | Auto-format then run ~cargo check~               |

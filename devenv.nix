@@ -90,8 +90,8 @@
     echo "   API_LISTEN_SOCKET=$API_LISTEN_SOCKET"
     echo "   DATABASE_URL=$DATABASE_URL"
     echo ""
-    echo "Run: devenv processes up  # start the services"
-    echo "     psql                 # connect to the demo database"
-    echo "     just run             # start the server"
+    echo "Run: just up  # start the services"
+    echo "     psql     # connect to the demo database"
+    echo "     just run # start the server"
   '';
 }
