@@ -1,9 +1,11 @@
 #+title: Future work
 
 This file sketches directions the project could grow to demonstrate more
-patterns commonly needed when evolving a real-world API server.
+ patterns commonly needed when evolving a real-world API server.
 None of these are commitments, they serve as a shared reference for what to
-tackle next and what patterns each direction would showcase.
+ tackle next and what patterns each direction would showcase.
+Once features are implemented make sure to remove the task and document it
+ elsewhere as you see fit.
 
 
 * Related resource (e.g. posts with ownership)
@@ -26,8 +28,3 @@ Demonstrates:
 Demonstrates:
 - Tokio tasks alongside the HTTP server
 - The async runtime outside a request context
-
-
-* What's next
-Pick one direction, implement it, then update this file with the concrete
-patterns that emerged.
