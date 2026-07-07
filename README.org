@@ -11,7 +11,7 @@ Nix dev shell, async database migrations, structured logging, and a clean REST A
 * Prerequisites
 
 - [[https://nixos.org/download][Nix]] with flakes enabled
-- ~direnv~ to automatically enter the right environment
+- [[https://devenv.sh/getting-started/][~devenv~]] to setup the environment
 - Documentation and Environment rely on ~org-mode~ with,
   - ~babel~ to render and run code blocks
   - ~verb-mode~ to run HTTP requests
