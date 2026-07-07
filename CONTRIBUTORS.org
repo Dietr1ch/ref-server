@@ -1,0 +1,3 @@
+#+title: Contributors
+
+- Dietrich Daroch [[https://github.com/Dietr1ch]] [[mailto:Dietrich@Daroch.me]]
