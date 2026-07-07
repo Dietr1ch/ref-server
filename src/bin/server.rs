@@ -86,6 +86,12 @@ async fn main() -> eyre::Result<()> {
 		.map_err(|e| eyre::eyre!("Migration thread panicked: {e}"))??;
 	}
 
+	// Warm the connection pool so the first request isn't penalised by lazy
+	// connection setup, and to fail early if the database is unreachable.
+	let _conn = pool.get().await.wrap_err("Failed to connect to database")?;
+	drop(_conn);
+	tracing::info!("Connection pool warmed up");
+
 	// HTTP server
 	// -----------
 	let app = routes::router(pool);
