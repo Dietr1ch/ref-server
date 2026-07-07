@@ -77,6 +77,7 @@ The application reads these environment variables:
 | ~SERVER_LOG~        | Tracing/logging filter                     |
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
+A ~.env.example~ file is provided as a starting point.
 
 ** API server
 *** CLI flags
