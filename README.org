@@ -12,6 +12,9 @@ Nix dev shell, async database migrations, structured logging, and a clean REST A
 
 - [[https://nixos.org/download][Nix]] with flakes enabled
 - ~direnv~ to automatically enter the right environment
+- Documentation and Environment rely on ~org-mode~ with,
+  - ~babel~ to render and run code blocks
+  - ~verb-mode~ to run HTTP requests
 
 
 * Quick start
@@ -80,7 +83,7 @@ Variables can be set in a ~.env~ file (loaded automatically on startup).
 
 ** Project layout
 
-- ~docs/~
+- ~docs/~ :: Documentation using source blocks and ~verb-mode~
   - ~api/~
   - ~db/~
   - ~web/~
@@ -106,22 +109,31 @@ Variables can be set in a ~.env~ file (loaded automatically on startup).
 
 ** Common commands
 
-| Command                      | Description                                   |
-|------------------------------+-----------------------------------------------|
-| ~devenv processes up~        | Start background services (DB)                |
-| ~just run~                   | Start the development server                  |
-| ~just check~                 | Run ~cargo check~                             |
-| ~just test~                  | Run all tests (requires background services)  |
-| ~just test-unit~             | Run unit tests (standalone)                   |
-| ~just lint~                  | Run ~cargo clippy -- -D warnings~             |
-| ~just fmt~                   | Format code with ~rustfmt~                    |
-| ~just db-setup~              | Initialise diesel                             |
-| ~just db-migration-new NAME~ | Create a new migration scaffold               |
-| ~just db-migration-run~        | Run pending Diesel migrations                 |
-| ~just db-migration-redo~     | Re-do last migration                          |
-| ~just db-reset~              | Drop and recreate the database                |
-| ~just db-clean-state~        | Nuke devenv's pg state (after version switch) |
-| ~just ci~                    | Full CI pipeline: check + test + lint         |
+| Command                      | Description                                      |
+|------------------------------+--------------------------------------------------|
+| ~devenv processes up~        | Start background services (DB)                   |
+|------------------------------+--------------------------------------------------|
+| ~just run~                   | Start the development server                     |
+| ~just check~                 | Auto-format then run ~cargo check~               |
+| ~just test~                  | Run all tests (requires background services)     |
+| ~just test-unit~             | Run unit tests (standalone)                      |
+| ~just build~                 | Build the server                                 |
+| ~just lint~                  | Run ~cargo clippy -- -D warnings~                |
+| ~just fmt~                   | Format code with ~rustfmt~                       |
+| ~just doc~                   | Generate documentation                           |
+| ~just clean~                 | Cleanup artifacts                                |
+|------------------------------+--------------------------------------------------|
+| ~just db-setup~              | Initialise diesel                                |
+| ~just db-migration-new NAME~ | Create a new migration scaffold                  |
+| ~just db-migration-run~      | Run pending Diesel migrations                    |
+| ~just db-migration-redo~     | Re-do last migration                             |
+| ~just db-reset~              | Drop and recreate the database                   |
+| ~just db-clean-state~        | Nuke devenv's pg state (after version switch)    |
+|------------------------------+--------------------------------------------------|
+| ~just ci~                    | Full CI pipeline: check + test + lint            |
+| ~just ci-quick~              | Smoke test CI pipeline: check + lint + unit-test |
+|------------------------------+--------------------------------------------------|
+| ~just update~                | Update Nix flakes and Rust crates                |
 
 Run ~just --list~ to see the full list.
 

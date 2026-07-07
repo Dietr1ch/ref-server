@@ -9,7 +9,7 @@ Tests,
 * /users                                                               :verb:
 template http://localhost:3001
 
-** List users
+** List users                                                      :success:
 get /users
 
 Returns user objects.  The primary key ~id~ is always included; use
@@ -26,14 +26,37 @@ Returns user objects.  The primary key ~id~ is always included; use
   # → [{"id": "…", "name": "…", "email": "…"}, …]
 #+end_src
 
-** Get user
+** Get existing user                                               :success:
 get /users/<uuid>
 
-** Create user
+** Get missing user                                                  :error:
+# * Returns an HTTP 404 when the user doesn't match
+#
+#   Example,
+#   {
+#     "error": "User c84adc3d-9f09-44f8-b378-d770546d4719 not found"
+#   }
+
+get /users/c84adc3d-9f09-44f8-b378-d770546d4719
+
+** Create user                                               :success:error:
+# * Returns an HTTP 201 when a new valid user is created
+#
+# * Returns an HTTP 409 when the user's email is already registered
+#
+#   Example,
+#   {
+#     "error": "A user with this email already exists"
+#   }
 post /users
 Content-Type: application/json
 
-{"name": "Alice", "email": "alice@example.com"}
+#+begin_src json
+{
+  "name": "Alice",
+  "email": "alice@example.com"
+}
+#+end_src
 
 
 * Misc                                                              :ARCHIVE:

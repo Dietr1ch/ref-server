@@ -6,6 +6,10 @@ Directory,
 - [[../../assets/][:/assets/]]
 
 
+The ~assets/~ directory contains whatever the project currently uses. We don't
+want to over-specify any of this since it would just add duplication.
+
+
 * /                                                                    :verb:
 template http://localhost:3000
 
