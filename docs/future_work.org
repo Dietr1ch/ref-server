@@ -22,12 +22,6 @@ Demonstrates:
 - Returning pagination metadata (~total~, ~next~, ~prev~)
 
 
-* Middleware (e.g. request timing)
-Demonstrates:
-- Adding tower layers to the ~axum~ router
-- Cross-cutting concerns separate from business logic
-
-
 * Background job (e.g. periodic health report)
 Demonstrates:
 - Tokio tasks alongside the HTTP server
