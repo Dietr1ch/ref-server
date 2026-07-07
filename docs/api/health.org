@@ -10,6 +10,12 @@ Tests,
 template http://localhost:3001
 
 ** Health check
+# Example,
+#
+# {
+#   "status": "ok"
+# }
+
 get /health
 
 

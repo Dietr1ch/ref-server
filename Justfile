@@ -27,7 +27,7 @@ db-migration-run:
 	diesel migration run
 
 # Redo the last migration (rollback then re-apply to verify down+up)
-db-redo:
+db-migration-redo:
 	diesel migration redo
 
 # Drop and recreate the database, run all migrations
