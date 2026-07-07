@@ -93,7 +93,7 @@ clean:
 # ==
 
 # Run the full CI pipeline (requires PostgreSQL via `devenv processes up`)
-ci: check test lint
+ci: check lint test
 
 # Quick CI — unit tests only, no database needed
-ci-quick: check test-unit lint
+ci-quick: check lint test-unit
