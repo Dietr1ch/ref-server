@@ -11,7 +11,7 @@ this file to your needs --- it is meant as a starting point.
 * Setup
 - Clone the repository.
 - Make sure the [[file:README.org::Prerequisites][prerequisites]] are met.
-- Run ~devenv processes up~ to start PostgreSQL.
+- Run ~just up~ to start background services (PostgreSQL, static-web-server).
 - Run ~just db-setup~ to create the database and apply migrations.
 - Run ~just test~ to verify everything works.
 
