@@ -1,0 +1,38 @@
+#+title: Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [[https://keepachangelog.com/en/1.1.0/][Keep a Changelog]],
+and this project adheres to [[https://semver.org/spec/v2.0.0.html][Semantic Versioning]].
+
+
+* [Unreleased]
+
+** Added
+
+- Project initialization with axum + diesel + PostgreSQL project scaffolding.
+- Nix flake + devenv development environment with automatic PostgreSQL service.
+- Async database connection pool via diesel-async + bb8.
+- Automatic database migrations at startup (--database-run-migrations flag).
+- Structured logging via tracing/tracing-subscriber with SERVER_LOG env filter.
+- /health endpoint returning {"status": "ok"}.
+- /users CRUD: list all, get by UUID, create (with duplicate email detection).
+- ?fields parameter on /users list for selective column queries.
+- Clap-based CLI with --database-pool-size and --database-connect-timeout flags.
+- Dotenv support for environment variable configuration.
+- Integration test suite covering health check, user CRUD, field selection,
+  duplicate email rejection, and 404 handling.
+- bacon configuration for continuous test runner.
+- static-web-server for serving assets/ directory.
+- pre-commit hooks via treefmt.
+
+** Changed
+
+- Migrated from dotenvy to clap env for configuration management.
+- Switched from synchronous diesel to diesel-async + bb8 pool.
+- Renamed project to ref-server.
+- Moved API documentation from README to docs/api/.
+- Separated integration tests per resource.
+- Organized Justfile recipes into Database / Development / CI sections.
+- Renamed Justfile recipes to db-* prefix for consistency.
+- Generated CONTRIBUTORS CHANGELOG and LICENSE files
