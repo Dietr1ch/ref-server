@@ -4,6 +4,7 @@ use clap::Parser;
 use diesel::Connection;
 use diesel::pg::PgConnection;
 use diesel_async::AsyncPgConnection;
+use diesel_async::RunQueryDsl;
 use diesel_async::pooled_connection::AsyncDieselConnectionManager;
 use diesel_async::pooled_connection::bb8::Pool;
 use diesel_migrations::{MigrationHarness, embed_migrations};
@@ -88,9 +89,20 @@ async fn main() -> eyre::Result<()> {
 
 	// Warm the connection pool so the first request isn't penalised by lazy
 	// connection setup, and to fail early if the database is unreachable.
-	let _conn = pool.get().await.wrap_err("Failed to connect to database")?;
-	drop(_conn);
-	tracing::info!("Connection pool warmed up");
+	{
+		use diesel::dsl::count_star;
+		use diesel::query_dsl::methods::SelectDsl;
+
+		let mut conn = pool.get().await.wrap_err("Failed to connect to database")?;
+
+		let count: i64 = ref_server::schema::users::table
+			.select(count_star())
+			.first(&mut conn)
+			.await
+			.wrap_err("Warm-up query failed")?;
+
+		tracing::info!("Connection pool warmed up; {count} users in database");
+	}
 
 	// HTTP server
 	// -----------
