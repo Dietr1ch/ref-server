@@ -78,6 +78,14 @@ The application reads these environment variables:
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
 
+** API server
+*** CLI flags
+Command line arguments override environment variables
+
+~--database-run-migrations~ :: Run pending migrations at startup
+~--database-connect-timeout <s>~ :: Connection timeout (default ~5s~)
+~--database-pool-size <n>~ :: Maximum pool connections (default ~8~)
+
 
 * Development
 
