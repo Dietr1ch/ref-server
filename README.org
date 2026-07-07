@@ -127,8 +127,8 @@ Command line arguments override environment variables
 | ~just test~                  | Run all tests (requires background services)     |
 | ~just test-unit~             | Run unit tests (standalone)                      |
 | ~just build~                 | Build the server                                 |
-| ~just lint~                  | Run ~cargo clippy -- -D warnings~                |
-| ~just fmt~                   | Format code with ~rustfmt~                       |
+| ~just lint~                  | Run ~cargo clippy~                               |
+| ~just fmt~                   | Format code with ~treefmt~                       |
 | ~just doc~                   | Generate documentation                           |
 | ~just clean~                 | Cleanup artifacts                                |
 |------------------------------+--------------------------------------------------|
