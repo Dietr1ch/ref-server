@@ -15,20 +15,20 @@ default: check
 # ========
 
 # Initialise diesel
-setup:
+db-setup:
 	diesel setup
 
+# Create a new migration with a given name, e.g. `just migration add_posts`
+db-migration-new name:
+	diesel migration generate {{name}}
+
 # Run pending migrations
-migrate:
+db-migration-run:
 	diesel migration run
 
-# Redo the last migration (rollback then re-apply)
-redo:
+# Redo the last migration (rollback then re-apply to verify down+up)
+db-redo:
 	diesel migration redo
-
-# Create a new migration with a given name, e.g. `just migration add_posts`
-migration name:
-	diesel migration generate {{name}}
 
 # Drop and recreate the database, run all migrations
 db-reset:
