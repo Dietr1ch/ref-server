@@ -28,6 +28,8 @@ Nix dev shell, async database migrations, structured logging, and a clean REST A
 This starts,
 - PostgreSQL listening on a Unix socket (~$DATABASE_URL~)
 - static-web-server listening on ~$WEB_LISTEN_SOCKET:=localhost:3000~
+- Prometheus listening on ~$PROMETHEUS_LISTEN_SOCKET:=0.0.0.0:39090~
+- Postgres exporter listening on ~$PG_EXPORTER_LISTEN_SOCKET:=0.0.0.0:9187~
 
 Press ~Ctrl+C~ to stop.
 
@@ -62,6 +64,7 @@ C-r C-r~) while on any of them to send the request.
 
 - [[./docs/api/health.org][/health]]
 - [[./docs/api/users.org][/users]]
+- [[./docs/api/metrics.org][/metrics]]
 
 
 
@@ -69,12 +72,14 @@ C-r C-r~) while on any of them to send the request.
 
 The application reads these environment variables:
 
-| Variable            | Description                                |
-|---------------------+--------------------------------------------|
-| ~DATABASE_URL~      | PostgreSQL connection string               |
-| ~WEB_LISTEN_SOCKET~ | Socket address to listen on for static Web |
-| ~API_LISTEN_SOCKET~ | Socket address to listen on the API server |
-| ~SERVER_LOG~        | Tracing/logging filter                     |
+| Variable                    | Description                                       |
+|-----------------------------+---------------------------------------------------|
+| ~DATABASE_URL~              | PostgreSQL connection string                      |
+| ~WEB_LISTEN_SOCKET~         | Socket address to listen on for static Web        |
+| ~API_LISTEN_SOCKET~         | Socket address to listen on the API server        |
+| ~PROMETHEUS_LISTEN_SOCKET~  | Socket address to listen on for Prometheus        |
+| ~PG_EXPORTER_LISTEN_SOCKET~ | Socket address to listen on for postgres_exporter |
+| ~SERVER_LOG~                | Tracing/logging filter                            |
 
 Variables can be set in a ~.env~ file (loaded automatically on startup).
 A ~.env.example~ file is provided as a starting point.
@@ -121,7 +126,7 @@ Command line arguments override environment variables
 
 | Command                      | Description                                      |
 |------------------------------+--------------------------------------------------|
-| ~just up~                    | Start background services (DB)                   |
+| ~just up~                    | Start background services (DB, web, Prometheus)  |
 |------------------------------+--------------------------------------------------|
 | ~just run~                   | Start the development server                     |
 | ~just check~                 | Auto-format then run ~cargo check~               |

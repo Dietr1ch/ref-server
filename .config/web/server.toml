@@ -7,3 +7,5 @@
 [general]
 host = "::"
 root = "./assets"
+# https://static-web-server.net/features/metrics/
+metrics = true
