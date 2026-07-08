@@ -89,6 +89,7 @@
     hooks = {
       treefmt = {
         enable = true;
+        # Configuration: ./.treefmt.toml
       }; # ..git-hooks.hooks.treefmt
 
       clippy = {
