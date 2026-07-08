@@ -32,6 +32,11 @@
       # The system might be running Postgres and make this pick :5432 or :5433 on some systems
       port = 35432;
 
+      extensions =
+        exts: with exts; [
+          pg_hint_plan
+        ];
+
       initialDatabases = [ { name = "demo"; } ];
     }; # ..services.postgres
   }; # ..services
