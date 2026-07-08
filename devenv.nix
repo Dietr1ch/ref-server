@@ -112,4 +112,9 @@
     echo "     psql     # connect to the demo database"
     echo "     just run # start the server"
   '';
+
+  enterTest = ''
+    # NOTE: This spins up services+processes prior to running
+    just ci
+  '';
 }
