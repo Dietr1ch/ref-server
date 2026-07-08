@@ -1,0 +1,91 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "formatter": {
+    "treefmt": {
+      "command": [
+        "treefmt",
+        "$FILE"
+      ],
+      "extensions": [
+        // Rust
+        ".rs",
+        // Nix
+        ".nix",
+        // DB
+        ".sql",
+        // Web
+        ".html",
+        ".js",
+        ".css",
+        // Config
+        ".jsonc",
+        ".json",
+        ".ron",
+        ".toml",
+      ]
+    }
+  },
+  "permission": {
+    "read": {
+      "Justfile": "allow",
+      ".example": "allow",
+      // Rust
+      ".rs": "allow",
+      // Nix
+      ".nix": "allow",
+      ".envrc": "allow",
+      // DB
+      ".sql": "allow",
+      // Web
+      ".html": "allow",
+      ".js": "allow",
+      ".css": "allow",
+      // Docs
+      ".org": "allow",
+      // Config
+      ".jsonc": "allow",
+      ".json": "allow",
+      ".ron": "allow",
+      ".toml": "allow",
+    },
+    "bash": {
+      // Unix
+      "sudo *": "deny",
+      "ls *": "allow",
+      "mv *": "ask",
+      "rm *": "deny",
+      // Find
+      "fd *": "allow",
+      "find *": "ask",
+      // Match
+      "rg *": "allow",
+      "grep *": "ask",
+      // Git
+      "git status *": "allow",
+      "git log *": "allow",
+      "git ls *": "allow",
+      "git diff *": "allow",
+      "git checkout *": "allow",
+      // Git - IO
+      "git mv *": "ask",
+      // Project
+      "just *": "allow",
+      "treefmt *": "allow",
+      // Nix
+      "nixfmt *": "ask",
+      // Rust
+      "cargo doc *": "allow",
+      "cargo spellcheck *": "allow",
+      "cargo fmt *": "allow",
+      "cargo check *": "allow",
+      "cargo clippy *": "allow",
+      "cargo nextest *": "allow",
+      "cargo test *": "allow",
+      "cargo build *": "allow",
+      "cargo run *": "ask",
+      // Rust - Crates
+      "cargo add *": "ask",
+      "cargo remove *": "ask",
+    }
+  }
+}
