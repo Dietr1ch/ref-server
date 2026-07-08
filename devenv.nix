@@ -36,6 +36,7 @@
     }; # ..services.postgres
   }; # ..services
 
+  # https://devenv.sh/processes/
   processes = {
     "static_web_server" = {
       exec = "SERVER_PORT=$WEB_LISTEN_PORT static-web-server --config-file $WEB_CONFIG_FILE";
