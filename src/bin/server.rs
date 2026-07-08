@@ -60,8 +60,11 @@ async fn main() -> eyre::Result<()> {
 
 	// Database
 	// --------
+	tracing::info!("Initialising DB connections...");
 	let connection_config =
 		AsyncDieselConnectionManager::<AsyncPgConnection>::new(&config.database_url);
+
+	tracing::debug!("Initialising DB connection Pool...");
 	let pool = Pool::builder()
 		.max_size(config.database_pool_size)
 		.connection_timeout(config.database_connect_timeout)
@@ -74,6 +77,7 @@ async fn main() -> eyre::Result<()> {
 	// tokio-postgres parses the connection URL differently from libpq, which can
 	// cause failures with Unix-socket-based connection strings.
 	if config.database_run_migrations {
+		tracing::debug!(" Checking for pending migrations...");
 		let database_url = config.database_url.clone();
 		tokio::task::spawn_blocking(move || {
 			let mut conn = PgConnection::establish(&database_url)
@@ -93,6 +97,7 @@ async fn main() -> eyre::Result<()> {
 		use diesel::dsl::count_star;
 		use diesel::query_dsl::methods::SelectDsl;
 
+		tracing::info!("Warming up DB connection...");
 		let mut conn = pool.get().await.wrap_err("Failed to connect to database")?;
 
 		let count: i64 = ref_server::schema::users::table
