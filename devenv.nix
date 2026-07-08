@@ -85,10 +85,19 @@
   }; # ..dotenv
 
   git-hooks = {
+    # https://devenv.sh/reference/options/#git-hookshooks
     hooks = {
       treefmt = {
         enable = true;
       }; # ..git-hooks.hooks.treefmt
+
+      clippy = {
+        enable = true;
+        settings = {
+          allFeatures = true;
+          denyWarnings = true;
+        };
+      }; # ..git-hooks.hooks.clippy
     }; # ..git-hooks.hooks
   }; # ..git-hooks
 
