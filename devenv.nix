@@ -7,6 +7,14 @@
       enable = true;
       toolchainFile = ./rust-toolchain.toml;
     }; # ..languages.rust
+
+    # https://devenv.sh/languages/nix/
+    nix = {
+      enable = true;
+      lsp = {
+        enable = true;
+      }; # ..languages.nix.lsp
+    }; # ..languages.nix
   }; # ..languages
 
   services = {
