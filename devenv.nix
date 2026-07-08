@@ -39,12 +39,54 @@
 
       initialDatabases = [ { name = "demo"; } ];
     }; # ..services.postgres
+
+    # https://devenv.sh/services/prometheus/
+    prometheus = {
+      enable = true;
+      port = 39090;
+
+      scrapeConfigs = [
+        {
+          job_name = "api";
+          static_configs = [
+            {
+              targets = [
+                config.env."API_LISTEN_SOCKET"
+              ];
+            }
+          ];
+        }
+        {
+          job_name = "web";
+          static_configs = [
+            {
+              targets = [
+                config.env."WEB_LISTEN_SOCKET"
+              ];
+            }
+          ];
+        }
+        {
+          job_name = "postgres";
+          static_configs = [
+            {
+              targets = [
+                config.env."PG_EXPORTER_LISTEN_SOCKET"
+              ];
+            }
+          ];
+        }
+      ];
+    }; # ..services.prometheus
   }; # ..services
 
   # https://devenv.sh/processes/
   processes = {
     "static_web_server" = {
       exec = "SERVER_PORT=$WEB_LISTEN_PORT static-web-server --config-file $WEB_CONFIG_FILE";
+    };
+    "postgres_exporter" = {
+      exec = "DATA_SOURCE_URI=$DATABASE_URL postgres_exporter --web.listen-address=$PG_EXPORTER_LISTEN_SOCKET";
     };
   }; # ..processes
 
@@ -64,6 +106,9 @@
     # Web server
     static-web-server
 
+    # Monitoring
+    prometheus-postgres-exporter
+
     # Nix
     nixfmt
 
@@ -80,6 +125,10 @@
     "WEB_CONFIG_FILE" = ".config/web/server.toml";
     # The API server
     "API_LISTEN_SOCKET" = "0.0.0.0:3001";
+    # Prometheus
+    "PROMETHEUS_LISTEN_SOCKET" = "0.0.0.0:${toString config.services.prometheus.port}";
+    # PostgreSQL exporter
+    "PG_EXPORTER_LISTEN_SOCKET" = "0.0.0.0:39187";
 
     # psql/libpq defaults — so `psql` connects to the project database.
     # PGHOST and PGPORT are set automatically by devenv's postgres service.
@@ -113,6 +162,8 @@
     echo "   WEB_LISTEN_SOCKET=$WEB_LISTEN_SOCKET"
     echo "   API_LISTEN_SOCKET=$API_LISTEN_SOCKET"
     echo "   DATABASE_URL=$DATABASE_URL"
+    echo "   PROMETHEUS_LISTEN_SOCKET=$PROMETHEUS_LISTEN_SOCKET"
+    echo "   PG_EXPORTER_LISTEN_SOCKET=$PG_EXPORTER_LISTEN_SOCKET"
     echo ""
     echo "Run: just up  # start the services"
     echo "     psql     # connect to the demo database"

@@ -44,7 +44,7 @@ db-clean-state:
 # Services
 # ========
 
-# Start up background services (PostgreSQL, static-web-server)
+# Start up background services (PostgreSQL, static-web-server, Prometheus)
 up:
 	devenv processes up
 

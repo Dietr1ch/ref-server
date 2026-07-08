@@ -1,0 +1,60 @@
+#+name: /metrics API
+
+Code,
+- [[../../src/routes/mod.rs][:/src/routes/mod.rs]]
+
+Provides Prometheus-formatted metrics for the API server.  Intended to be
+scraped by Prometheus or inspected manually.
+
+Metrics are recorded for every request (except the /metrics endpoint itself):
+
+| Metric                                | Type      | Labels                   | Description                  |
+|---------------------------------------+-----------+--------------------------+------------------------------|
+| ~axum_http_requests_total~            | Counter   | endpoint, method, status | Total HTTP requests handled  |
+| ~axum_http_requests_duration_seconds~ | Histogram | endpoint, method, status | Request duration             |
+| ~axum_http_requests_pending~          | Gauge     | endpoint, method         | Currently in-flight requests |
+
+The metric prefix ~axum_http_~ can be changed at compile time via environment
+variables (see ~axum-prometheus~ docs).
+
+
+* /metrics                                                            :verb:
+template http://localhost:3001
+
+** Scrape metrics
+get /metrics
+
+Returns ~Content-Type: text/plain; charset=utf-8~ with Prometheus exposition
+format.
+
+#+begin_src text
+  # HELP axum_http_requests_total Total number of HTTP requests
+  # TYPE axum_http_requests_total counter
+  axum_http_requests_total{method="GET",endpoint="/health",status="200"} 42
+  # HELP axum_http_requests_duration_seconds HTTP request duration in seconds
+  # TYPE axum_http_requests_duration_seconds histogram
+  axum_http_requests_duration_seconds_bucket{method="GET",endpoint="/health",status="200",le="0.005"} 40
+  axum_http_requests_duration_seconds_bucket{method="GET",endpoint="/health",status="200",le="+Inf"} 42
+  axum_http_requests_duration_seconds_sum{method="GET",endpoint="/health",status="200"} 0.85
+  axum_http_requests_duration_seconds_count{method="GET",endpoint="/health",status="200"} 42
+#+end_src
+
+
+* Configuration
+No additional configuration required.  Metrics are served on the same socket as
+the API server.
+
+To configure Prometheus to scrape this endpoint:
+
+#+begin_src yaml
+  scrape_configs:
+    - job_name: 'ref-server'
+      static_configs:
+        - targets: ['localhost:3001']
+#+end_src
+
+
+* Misc                                                              :ARCHIVE:
+# Local Variables:
+# eval: (verb-mode)
+# End:
