@@ -66,7 +66,7 @@ build:
 	cargo build
 
 # Run all tests (requires `just up` for integration tests)
-test:
+test-all:
 	cargo nextest run
 
 # Run fast unit tests (no database needed)
@@ -101,7 +101,7 @@ clean:
 # ==
 
 # Run the full CI pipeline (requires PostgreSQL via `just up`)
-ci: check lint test
+ci: check lint test-all
 
 # Quick CI — unit tests only, no database needed
 ci-quick: check lint test-unit

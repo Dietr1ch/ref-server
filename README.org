@@ -125,7 +125,7 @@ Command line arguments override environment variables
 |------------------------------+--------------------------------------------------|
 | ~just run~                   | Start the development server                     |
 | ~just check~                 | Auto-format then run ~cargo check~               |
-| ~just test~                  | Run all tests (requires background services)     |
+| ~just test-all~              | Run all tests (requires background services)     |
 | ~just test-unit~             | Run unit tests (standalone)                      |
 | ~just build~                 | Build the server                                 |
 | ~just lint~                  | Run ~cargo clippy~                               |
@@ -140,7 +140,7 @@ Command line arguments override environment variables
 | ~just db-reset~              | Drop and recreate the database                   |
 | ~just db-clean-state~        | Nuke devenv's pg state (after version switch)    |
 |------------------------------+--------------------------------------------------|
-| ~just ci~                    | Full CI pipeline: check + test + lint            |
+| ~just ci~                    | Full CI pipeline: check + all tests + lint       |
 | ~just ci-quick~              | Smoke test CI pipeline: check + lint + unit-test |
 |------------------------------+--------------------------------------------------|
 | ~just update~                | Update Nix flakes and Rust crates                |

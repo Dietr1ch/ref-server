@@ -13,7 +13,7 @@ this file to your needs --- it is meant as a starting point.
 - Make sure the [[file:README.org::Prerequisites][prerequisites]] are met.
 - Run ~just up~ to start background services (PostgreSQL, static-web-server).
 - Run ~just db-setup~ to create the database and apply migrations.
-- Run ~just test~ to verify everything works.
+- Run ~just test-all~ to verify everything works.
 
 
 * Coding conventions
@@ -32,9 +32,8 @@ Open a GitHub issue with:
 
 
 * Pull request process
-1. Ensure all tests pass (~just test~).
-2. Run ~just ci~ (check + test + lint) before opening.
-3. Keep changes focused --- one PR per concern.
+1. Ensure all tests pass in the test environment (~devenv test~).
+2. Keep changes focused --- one PR per concern.
 
 
 * Code of conduct
