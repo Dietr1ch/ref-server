@@ -27,23 +27,23 @@
       "Justfile": "allow",
       ".example": "allow",
       // Rust
-      ".rs": "allow",
+      "*.rs": "allow",
       // Nix
-      ".nix": "allow",
-      ".envrc": "allow",
+      "*.nix": "allow",
+      "*.envrc": "allow",
       // DB
-      ".sql": "allow",
+      "*.sql": "allow",
       // Web
-      ".html": "allow",
-      ".js": "allow",
-      ".css": "allow",
+      "*.html": "allow",
+      "*.js": "allow",
+      "*.css": "allow",
       // Docs
-      ".org": "allow",
+      "*.org": "allow",
       // Config
-      ".jsonc": "allow",
-      ".json": "allow",
-      ".ron": "allow",
-      ".toml": "allow"
+      "*.jsonc": "allow",
+      "*.json": "allow",
+      "*.ron": "allow",
+      "*.toml": "allow"
     },
     "bash": {
       // Unix
