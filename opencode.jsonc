@@ -3,6 +3,7 @@
   "lsp": true,
   "formatter": {
     "treefmt": {
+      // Configuration: ./.treefmt.toml
       "command": ["treefmt", "$FILE"],
       "extensions": [
         // Rust
