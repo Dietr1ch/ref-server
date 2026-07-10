@@ -9,18 +9,7 @@
         // Rust
         ".rs",
         // Nix
-        ".nix",
-        // DB
-        ".sql",
-        // Web
-        ".html",
-        ".js",
-        ".css",
-        // Config
-        ".jsonc",
-        ".json",
-        ".ron",
-        ".toml"
+        ".nix"
       ]
     }
   },
