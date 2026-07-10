@@ -24,6 +24,11 @@
       ]
     }
   },
+  "references": {
+    "docs": {
+      "path": "docs"
+    }
+  },
   "permission": {
     "read": {
       "Justfile": "allow",
