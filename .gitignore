@@ -12,12 +12,10 @@
 
 
 # Rust
-!.clippy.toml
-!.rustfmt.toml
+/target
 
 # Project
 !.config
 !.*.example
 !.*.toml
 TODOs.org
-/target
