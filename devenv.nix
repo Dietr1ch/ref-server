@@ -32,10 +32,7 @@
       # The system might be running Postgres and make this pick :5432 or :5433 on some systems
       port = 35432;
 
-      extensions =
-        exts: with exts; [
-          pg_hint_plan
-        ];
+      extensions = exts: with exts; [ pg_hint_plan ];
 
       initialDatabases = [ { name = "demo"; } ];
     }; # ..services.postgres
@@ -48,33 +45,15 @@
       scrapeConfigs = [
         {
           job_name = "api";
-          static_configs = [
-            {
-              targets = [
-                config.env."API_LISTEN_SOCKET"
-              ];
-            }
-          ];
+          static_configs = [ { targets = [ config.env."API_LISTEN_SOCKET" ]; } ];
         }
         {
           job_name = "web";
-          static_configs = [
-            {
-              targets = [
-                config.env."WEB_LISTEN_SOCKET"
-              ];
-            }
-          ];
+          static_configs = [ { targets = [ config.env."WEB_LISTEN_SOCKET" ]; } ];
         }
         {
           job_name = "postgres";
-          static_configs = [
-            {
-              targets = [
-                config.env."PG_EXPORTER_LISTEN_SOCKET"
-              ];
-            }
-          ];
+          static_configs = [ { targets = [ config.env."PG_EXPORTER_LISTEN_SOCKET" ]; } ];
         }
       ];
     }; # ..services.prometheus
