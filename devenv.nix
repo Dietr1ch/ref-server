@@ -147,6 +147,9 @@
   git-hooks = {
     # https://devenv.sh/reference/options/#git-hookshooks
     hooks = {
+      check-symlinks.enable = true;
+      ripsecrets.enable = true;
+
       treefmt = {
         enable = true;
         # Configuration: ./.treefmt.toml
