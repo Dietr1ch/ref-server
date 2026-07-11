@@ -123,6 +123,8 @@
     enable = true;
   }; # ..dotenv
 
+  difftastic.enable = true;
+
   git-hooks = {
     # https://devenv.sh/reference/options/#git-hookshooks
     hooks = {
