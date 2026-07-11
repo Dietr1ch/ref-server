@@ -40,6 +40,11 @@
       initialDatabases = [ { name = "demo"; } ];
     }; # ..services.postgres
 
+    # https://devenv.sh/services/keycloak/
+    keycloak = {
+      enable = true;
+    }; # ..services.keycloak
+
     # https://devenv.sh/services/prometheus/
     prometheus = {
       enable = true;

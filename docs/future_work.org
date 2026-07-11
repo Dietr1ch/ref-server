@@ -31,12 +31,6 @@ Demonstrates:
 
 
 * Authentication via Keycloak (OIDC/OAuth2)
-  Replace the raw ~/users~ CRUD with a real login flow backed by Keycloak.
-
-  Prerequisites:
-  - Add Keycloak to the devenv services (shares the Postgres instance)
-  - Set up a Keycloak realm and client for the API
-
   Demonstrates:
   - OIDC discovery and JWKS verification in axum middleware
   - Guarding routes with a ~RequireAuth~ extractor (or similar)
@@ -44,3 +38,11 @@ Demonstrates:
   - Mapping Keycloak users to local ~users~ rows (upsert on first login)
   - Replacing the raw user CRUD with self-service ~GET /users/me~ and ~PATCH /users/me~ endpoints (read and edit own profile)
   - Integration test that obtains a real token from Keycloak
+
+** TODO Add Keycloak to the devenv services (shares the Postgres instance)
+*** References
+- https://www.keycloak.org/server/db
+- https://www.keycloak.org/server/configuration
+** TODO Set up a Keycloak realm and client for the API
+** TODO Authentication via Keycloak (OIDC/OAuth2)
+Replace the raw ~/users~ CRUD with a real login flow backed by Keycloak.
