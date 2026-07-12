@@ -46,7 +46,11 @@ db-clean-state:
 
 # Start up background services (PostgreSQL, static-web-server, Prometheus)
 up:
-	devenv processes up
+	devenv \
+	  --profile 'frontend' \
+	  --profile 'backend' \
+	  --profile 'monitoring' \
+	  processes up
 
 
 
