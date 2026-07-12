@@ -1,0 +1,5 @@
+# -*- mode: gitignore; -*-
+# See :/.gitignore for files that aren't checked-in.
+
+# Lockfiles
+*.lock
