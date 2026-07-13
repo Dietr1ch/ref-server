@@ -20,6 +20,7 @@ use uuid::Uuid;
 use crate::app;
 use crate::models::user::User;
 use crate::models::user::request;
+use crate::models::user::response;
 
 /// Query parameters for the users collection endpoint.
 #[derive(Debug, Default, Deserialize)]
@@ -105,11 +106,11 @@ pub async fn list_users(
 pub async fn create_user(
 	State(pool): State<app::DbPool>,
 	Json(new_user): Json<request::New>,
-) -> Result<(StatusCode, Json<User>), app::Error> {
+) -> Result<(StatusCode, Json<response::Created>), app::Error> {
 	use crate::schema::users::dsl::*;
 
 	let mut conn = pool.get().await.map_err(app::Error::internal)?;
-	let user = diesel::insert_into(users)
+	let new_user = diesel::insert_into(users)
 		.values(&new_user)
 		.returning(User::as_returning())
 		.get_result(&mut conn)
@@ -122,7 +123,10 @@ pub async fn create_user(
 			other => app::Error::internal(other),
 		})?;
 
-	Ok((StatusCode::CREATED, Json(user)))
+	Ok((
+		StatusCode::CREATED,
+		Json(response::Created { id: new_user.id }),
+	))
 }
 
 /// GET /users/{id} — fetch a single user by UUID.
