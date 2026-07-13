@@ -23,6 +23,7 @@ mod tests {
 	use googletest::prelude::*;
 	use tower::ServiceExt;
 
+	#[gtest]
 	#[tokio::test]
 	async fn timer_passthrough_ok_response() {
 		let app = Router::new()
@@ -42,9 +43,10 @@ mod tests {
 			.await
 			.unwrap();
 
-		assert_that!(response.status(), eq(200));
+		expect_that!(response.status(), eq(200));
 	}
 
+	#[gtest]
 	#[tokio::test]
 	async fn timer_passthrough_404_response() {
 		let app = Router::new()
@@ -64,6 +66,6 @@ mod tests {
 			.await
 			.unwrap();
 
-		assert_that!(response.status(), eq(404));
+		expect_that!(response.status(), eq(404));
 	}
 }

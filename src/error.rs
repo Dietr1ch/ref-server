@@ -52,55 +52,61 @@ mod tests {
 		serde_json::from_slice(&body_bytes).unwrap()
 	}
 
+	#[gtest]
 	#[tokio::test]
 	async fn internal_error_returns_500() {
 		let response = AppError::internal("db connection failed").into_response();
 
-		assert_that!(response.status(), eq(StatusCode::INTERNAL_SERVER_ERROR));
+		expect_that!(response.status(), eq(StatusCode::INTERNAL_SERVER_ERROR));
 	}
 
+	#[gtest]
 	#[tokio::test]
 	async fn internal_error_includes_message() {
 		let response = AppError::internal("db connection failed").into_response();
 		let json = body_json(response).await;
 
-		assert_that!(
+		expect_that!(
 			json.get("error").and_then(|v| v.as_str()),
 			some(contains_substring("db connection failed"))
 		);
 	}
 
+	#[gtest]
 	#[tokio::test]
 	async fn not_found_returns_404() {
 		let response = AppError::not_found("User 123 not found").into_response();
 
-		assert_that!(response.status(), eq(StatusCode::NOT_FOUND));
+		expect_that!(response.status(), eq(StatusCode::NOT_FOUND));
 	}
 
+	#[gtest]
 	#[tokio::test]
 	async fn not_found_includes_message() {
 		let response = AppError::not_found("User 123 not found").into_response();
 		let json = body_json(response).await;
 
-		assert_that!(
+		expect_that!(
 			json.get("error").and_then(|v| v.as_str()),
 			some(eq("User 123 not found"))
 		);
 	}
 
+	#[gtest]
 	#[tokio::test]
 	async fn conflict_returns_409() {
 		let response = AppError::conflict("email already taken").into_response();
 
-		assert_eq!(response.status(), StatusCode::CONFLICT);
+		expect_eq!(response.status(), StatusCode::CONFLICT);
 	}
 
+	#[gtest]
 	#[tokio::test]
 	async fn conflict_includes_message() {
 		let response = AppError::conflict("email already taken").into_response();
 		let json = body_json(response).await;
 
-		assert_that!(
+		expect_that!(
 			json.get("error").and_then(|v| v.as_str()),
 			some(eq("email already taken"))
 		);

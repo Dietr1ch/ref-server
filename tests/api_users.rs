@@ -12,6 +12,7 @@ use uuid::Uuid;
 
 mod common;
 
+#[gtest]
 #[tokio::test]
 async fn list_users_empty_returns_empty_array() {
 	let app = common::test_app().await;
@@ -21,12 +22,13 @@ async fn list_users_empty_returns_empty_array() {
 		.await
 		.unwrap();
 
-	assert_that!(response.status(), eq(StatusCode::OK));
+	expect_that!(response.status(), eq(StatusCode::OK));
 
 	let list: serde_json::Value = common::response_json(response).await;
-	assert_that!(list, eq(&serde_json::json!([])));
+	expect_that!(list, eq(&serde_json::json!([])));
 }
 
+#[gtest]
 #[tokio::test]
 async fn create_and_list_and_get_user() {
 	let app = common::test_app().await;
@@ -48,7 +50,7 @@ async fn create_and_list_and_get_user() {
 		.await
 		.unwrap();
 
-	assert_that!(response.status(), eq(StatusCode::CREATED));
+	expect_that!(response.status(), eq(StatusCode::CREATED));
 
 	let created: serde_json::Value = common::response_json(response).await;
 	let user_id: Uuid = created
@@ -56,11 +58,11 @@ async fn create_and_list_and_get_user() {
 		.and_then(|v| v.as_str())
 		.and_then(|s| s.parse().ok())
 		.expect("Created user should have a valid UUID `id`");
-	assert_that!(
+	expect_that!(
 		created.get("name").and_then(|v| v.as_str()),
 		some(eq("Alice"))
 	);
-	assert_that!(
+	expect_that!(
 		created.get("email").and_then(|v| v.as_str()),
 		some(eq("alice@example.com"))
 	);
@@ -72,9 +74,9 @@ async fn create_and_list_and_get_user() {
 		.await
 		.unwrap();
 
-	assert_that!(list_response.status(), eq(StatusCode::OK));
+	expect_that!(list_response.status(), eq(StatusCode::OK));
 	let list: serde_json::Value = common::response_json(list_response).await;
-	assert_that!(list, eq(&serde_json::json!([{"id": user_id.to_string()}])));
+	expect_that!(list, eq(&serde_json::json!([{"id": user_id.to_string()}])));
 
 	// Get user by ID
 	let get_response = app
@@ -87,11 +89,12 @@ async fn create_and_list_and_get_user() {
 		.await
 		.unwrap();
 
-	assert_that!(get_response.status(), eq(StatusCode::OK));
+	expect_that!(get_response.status(), eq(StatusCode::OK));
 	let fetched: serde_json::Value = common::response_json(get_response).await;
-	assert_that!(fetched, eq(&created));
+	expect_that!(fetched, eq(&created));
 }
 
+#[gtest]
 #[tokio::test]
 async fn list_users_with_fields() {
 	let app = common::test_app().await;
@@ -111,7 +114,7 @@ async fn list_users_with_fields() {
 		)
 		.await
 		.unwrap();
-	assert_that!(response.status(), eq(StatusCode::CREATED));
+	expect_that!(response.status(), eq(StatusCode::CREATED));
 	let created: serde_json::Value = common::response_json(response).await;
 	let user_id = created
 		.get("id")
@@ -129,9 +132,9 @@ async fn list_users_with_fields() {
 		)
 		.await
 		.unwrap();
-	assert_that!(r.status(), eq(StatusCode::OK));
+	expect_that!(r.status(), eq(StatusCode::OK));
 	let list: serde_json::Value = common::response_json(r).await;
-	assert_that!(list, eq(&serde_json::json!([{"id": user_id}])));
+	expect_that!(list, eq(&serde_json::json!([{"id": user_id}])));
 
 	// Request `id` and `name`
 	let r = app
@@ -143,9 +146,9 @@ async fn list_users_with_fields() {
 		)
 		.await
 		.unwrap();
-	assert_that!(r.status(), eq(StatusCode::OK));
+	expect_that!(r.status(), eq(StatusCode::OK));
 	let list: serde_json::Value = common::response_json(r).await;
-	assert_that!(
+	expect_that!(
 		list,
 		eq(&serde_json::json!([{"id": user_id, "name": "Bob"}]))
 	);
@@ -160,11 +163,12 @@ async fn list_users_with_fields() {
 		)
 		.await
 		.unwrap();
-	assert_that!(r.status(), eq(StatusCode::OK));
+	expect_that!(r.status(), eq(StatusCode::OK));
 	let list: serde_json::Value = common::response_json(r).await;
-	assert_that!(list, eq(&serde_json::json!([{"id": user_id}])));
+	expect_that!(list, eq(&serde_json::json!([{"id": user_id}])));
 }
 
+#[gtest]
 #[tokio::test]
 async fn get_nonexistent_user_returns_404() {
 	let app = common::test_app().await;
@@ -179,15 +183,16 @@ async fn get_nonexistent_user_returns_404() {
 		.await
 		.unwrap();
 
-	assert_that!(response.status(), eq(StatusCode::NOT_FOUND));
+	expect_that!(response.status(), eq(StatusCode::NOT_FOUND));
 
 	let json = common::response_json(response).await;
-	assert_that!(
+	expect_that!(
 		json.get("error").and_then(|v| v.as_str()),
 		some(contains_substring("not found"))
 	);
 }
 
+#[gtest]
 #[tokio::test]
 async fn create_duplicate_email_returns_409() {
 	let app = common::test_app().await;
@@ -210,7 +215,7 @@ async fn create_duplicate_email_returns_409() {
 		.await
 		.unwrap();
 
-	assert_that!(r1.status(), eq(StatusCode::CREATED));
+	expect_that!(r1.status(), eq(StatusCode::CREATED));
 
 	// Second create with same email — should conflict
 	let r2 = app
@@ -224,10 +229,10 @@ async fn create_duplicate_email_returns_409() {
 		.await
 		.unwrap();
 
-	assert_that!(r2.status(), eq(StatusCode::CONFLICT));
+	expect_that!(r2.status(), eq(StatusCode::CONFLICT));
 
 	let json = common::response_json(r2).await;
-	assert_that!(
+	expect_that!(
 		json.get("error").and_then(|v| v.as_str()),
 		some(contains_substring("already exists"))
 	);

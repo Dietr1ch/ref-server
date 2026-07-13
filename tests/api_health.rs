@@ -11,6 +11,7 @@ use tower::ServiceExt;
 
 mod common;
 
+#[gtest]
 #[tokio::test]
 async fn health_returns_200() {
 	let app = common::test_app().await;
@@ -25,8 +26,8 @@ async fn health_returns_200() {
 		.await
 		.unwrap();
 
-	assert_that!(response.status(), eq(StatusCode::OK));
+	expect_that!(response.status(), eq(StatusCode::OK));
 
 	let json = common::response_json(response).await;
-	assert_that!(json, eq(&serde_json::json!({"status": "ok"})));
+	expect_that!(json, eq(&serde_json::json!({"status": "ok"})));
 }
