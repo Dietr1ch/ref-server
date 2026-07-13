@@ -27,6 +27,11 @@ axum-prometheus = "0.10.0"
 [dev-dependencies]
 googletest = "0.14"
 
+
+[lints.clippy]
+# https://rust-lang.github.io/rust-clippy/master/index.html#unwrap_used
+unwrap_used = "deny"
+
 [profile.dev]
 debug = "line-tables-only"
 opt-level = 0
