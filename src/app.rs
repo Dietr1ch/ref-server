@@ -1,14 +1,19 @@
 use axum::Json;
 use axum::http::StatusCode;
+use diesel_async::AsyncPgConnection;
+use diesel_async::pooled_connection::bb8::Pool;
 use serde_json::json;
 
+/// PostgreSQL connection pool used throughout the application.
+pub type DbPool = Pool<AsyncPgConnection>;
+
 /// Unified application error type that produces JSON error responses.
-pub struct AppError {
+pub struct Error {
 	status: StatusCode,
 	message: String,
 }
 
-impl AppError {
+impl Error {
 	pub fn internal<E: std::fmt::Debug>(err: E) -> Self {
 		Self {
 			status: StatusCode::INTERNAL_SERVER_ERROR,
@@ -32,7 +37,7 @@ impl AppError {
 }
 
 /// Allow axum to convert our error into an HTTP response.
-impl axum::response::IntoResponse for AppError {
+impl axum::response::IntoResponse for Error {
 	fn into_response(self) -> axum::response::Response {
 		let body = json!({ "error": self.message });
 		(self.status, Json(body)).into_response()
@@ -55,7 +60,7 @@ mod tests {
 	#[gtest]
 	#[tokio::test]
 	async fn internal_error_returns_500() {
-		let response = AppError::internal("db connection failed").into_response();
+		let response = Error::internal("db connection failed").into_response();
 
 		expect_that!(response.status(), eq(StatusCode::INTERNAL_SERVER_ERROR));
 	}
@@ -63,7 +68,7 @@ mod tests {
 	#[gtest]
 	#[tokio::test]
 	async fn internal_error_includes_message() {
-		let response = AppError::internal("db connection failed").into_response();
+		let response = Error::internal("db connection failed").into_response();
 		let json = body_json(response).await;
 
 		expect_that!(
@@ -75,7 +80,7 @@ mod tests {
 	#[gtest]
 	#[tokio::test]
 	async fn not_found_returns_404() {
-		let response = AppError::not_found("User 123 not found").into_response();
+		let response = Error::not_found("User 123 not found").into_response();
 
 		expect_that!(response.status(), eq(StatusCode::NOT_FOUND));
 	}
@@ -83,7 +88,7 @@ mod tests {
 	#[gtest]
 	#[tokio::test]
 	async fn not_found_includes_message() {
-		let response = AppError::not_found("User 123 not found").into_response();
+		let response = Error::not_found("User 123 not found").into_response();
 		let json = body_json(response).await;
 
 		expect_that!(
@@ -95,7 +100,7 @@ mod tests {
 	#[gtest]
 	#[tokio::test]
 	async fn conflict_returns_409() {
-		let response = AppError::conflict("email already taken").into_response();
+		let response = Error::conflict("email already taken").into_response();
 
 		expect_eq!(response.status(), StatusCode::CONFLICT);
 	}
@@ -103,7 +108,7 @@ mod tests {
 	#[gtest]
 	#[tokio::test]
 	async fn conflict_includes_message() {
-		let response = AppError::conflict("email already taken").into_response();
+		let response = Error::conflict("email already taken").into_response();
 		let json = body_json(response).await;
 
 		expect_that!(

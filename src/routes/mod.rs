@@ -6,13 +6,13 @@ use axum::routing::get;
 use axum_prometheus::PrometheusMetricLayer;
 use tower::ServiceBuilder;
 
-use crate::DbPool;
+use crate::app;
 
 // Routing
 // =======
 
 /// Build the axum router with all routes and shared state.
-pub fn router(pool: DbPool) -> Router {
+pub fn router(pool: app::DbPool) -> Router {
 	let (prometheus_layer, metric_handle) = PrometheusMetricLayer::pair();
 
 	Router::new()

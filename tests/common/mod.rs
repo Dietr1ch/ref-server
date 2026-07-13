@@ -6,7 +6,7 @@ use diesel_async::pooled_connection::AsyncDieselConnectionManager;
 use diesel_async::pooled_connection::bb8::Pool;
 use diesel_migrations::{MigrationHarness, embed_migrations};
 
-use ref_server::DbPool;
+use ref_server::app;
 use ref_server::routes;
 
 const MIGRATIONS: diesel_migrations::EmbeddedMigrations = embed_migrations!("migrations");
@@ -16,7 +16,7 @@ const MIGRATIONS: diesel_migrations::EmbeddedMigrations = embed_migrations!("mig
 /// The pool has a single connection with an active test transaction that is
 /// rolled back when the pool is dropped — so each test starts with a clean
 /// database and no cleanup is needed.
-pub async fn test_setup() -> DbPool {
+pub async fn test_setup() -> app::DbPool {
 	let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set for tests");
 
 	// Run migrations using sync libpq (matches server startup behaviour).
