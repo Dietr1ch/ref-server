@@ -18,18 +18,20 @@ mod tests {
 	use super::*;
 	use googletest::prelude::*;
 
+	#[gtest]
 	#[tokio::test]
 	async fn health_returns_ok() {
 		let response = health().await;
 
-		assert_that!(response.0, eq(&json!({"status": "ok"})));
+		expect_that!(response.0, eq(&json!({"status": "ok"})));
 	}
 
+	#[gtest]
 	#[tokio::test]
 	async fn health_status_is_string_ok() {
 		let response = health().await;
 
-		assert_that!(
+		expect_that!(
 			response.0.get("status").and_then(|v| v.as_str()),
 			some(eq("ok"))
 		);

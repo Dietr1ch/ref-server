@@ -11,6 +11,7 @@ use tower::ServiceExt;
 
 mod common;
 
+#[gtest]
 #[tokio::test]
 async fn metrics_returns_200() {
 	let app = common::test_app().await;
@@ -25,9 +26,10 @@ async fn metrics_returns_200() {
 		.await
 		.unwrap();
 
-	assert_that!(response.status(), eq(StatusCode::OK));
+	expect_that!(response.status(), eq(StatusCode::OK));
 }
 
+#[gtest]
 #[tokio::test]
 async fn metrics_contains_expected_entries() {
 	let app = common::test_app().await;
@@ -47,10 +49,10 @@ async fn metrics_contains_expected_entries() {
 		.unwrap();
 	let body = String::from_utf8(body_bytes.to_vec()).unwrap();
 
-	assert_that!(body, contains_substring("axum_http_requests_total"));
-	assert_that!(
+	expect_that!(body, contains_substring("axum_http_requests_total"));
+	expect_that!(
 		body,
 		contains_substring("axum_http_requests_duration_seconds")
 	);
-	assert_that!(body, contains_substring("axum_http_requests_pending"));
+	expect_that!(body, contains_substring("axum_http_requests_pending"));
 }
