@@ -7,6 +7,9 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 /// A user as stored in the database and returned by the API.
+///
+/// Used in  :/docs/api/users.org
+/// Corresponds to :/docs/db/users.org
 #[derive(Debug, Clone, Serialize, Deserialize, Queryable, Selectable)]
 #[diesel(table_name = crate::schema::users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
