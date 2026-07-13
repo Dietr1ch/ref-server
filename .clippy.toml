@@ -1,4 +1,7 @@
 # https://doc.rust-lang.org/clippy/
 
+# https://rust-lang.github.io/rust-clippy/master/index.html#multiple_crate_versions
+allowed-duplicate-crates = []
+
 # https://doc.rust-lang.org/clippy/lint_configuration.html#avoid-breaking-exported-api
 avoid-breaking-exported-api = false
