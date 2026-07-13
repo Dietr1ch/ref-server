@@ -17,8 +17,7 @@ use diesel_async::RunQueryDsl;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::DbPool;
-use crate::error::AppError;
+use crate::app;
 use crate::models::user::{NewUser, User};
 
 /// Query parameters for the users collection endpoint.
@@ -77,9 +76,9 @@ struct DataRow {
 ///   GET /users?fields=name,email  → `[{id: …, name: …, email: …}, …]`
 ///   GET /users?fields=name        → `[{id: …, name: …}, …]`
 pub async fn list_users(
-	State(pool): State<DbPool>,
+	State(pool): State<app::DbPool>,
 	Query(params): Query<UsersQuery>,
-) -> Result<Json<Vec<serde_json::Value>>, AppError> {
+) -> Result<Json<Vec<serde_json::Value>>, app::Error> {
 	let columns = select_clause(params.fields.as_deref());
 
 	let sql = format!(
@@ -87,28 +86,28 @@ pub async fn list_users(
 		 FROM (SELECT {columns} FROM users) t",
 	);
 
-	let mut conn = pool.get().await.map_err(AppError::internal)?;
+	let mut conn = pool.get().await.map_err(app::Error::internal)?;
 
 	tracing::debug!("Querying: {sql:?}");
 	let row: DataRow = diesel::sql_query(sql)
 		.get_result(&mut conn)
 		.await
-		.map_err(|e| AppError::internal(format!("{e}")))?;
+		.map_err(|e| app::Error::internal(format!("{e}")))?;
 
 	let items: Vec<serde_json::Value> =
-		serde_json::from_str(&row.data).map_err(|e| AppError::internal(format!("{e}")))?;
+		serde_json::from_str(&row.data).map_err(|e| app::Error::internal(format!("{e}")))?;
 
 	Ok(Json(items))
 }
 
 /// POST /users — create a new user.
 pub async fn create_user(
-	State(pool): State<DbPool>,
+	State(pool): State<app::DbPool>,
 	Json(new_user): Json<NewUser>,
-) -> Result<(StatusCode, Json<User>), AppError> {
+) -> Result<(StatusCode, Json<User>), app::Error> {
 	use crate::schema::users::dsl::*;
 
-	let mut conn = pool.get().await.map_err(AppError::internal)?;
+	let mut conn = pool.get().await.map_err(app::Error::internal)?;
 	let user = diesel::insert_into(users)
 		.values(&new_user)
 		.returning(User::as_returning())
@@ -118,8 +117,8 @@ pub async fn create_user(
 			diesel::result::Error::DatabaseError(
 				diesel::result::DatabaseErrorKind::UniqueViolation,
 				_,
-			) => AppError::conflict("A user with this email already exists"),
-			other => AppError::internal(other),
+			) => app::Error::conflict("A user with this email already exists"),
+			other => app::Error::internal(other),
 		})?;
 
 	Ok((StatusCode::CREATED, Json(user)))
@@ -127,12 +126,12 @@ pub async fn create_user(
 
 /// GET /users/{id} — fetch a single user by UUID.
 pub async fn get_user(
-	State(pool): State<DbPool>,
+	State(pool): State<app::DbPool>,
 	Path(user_id): Path<Uuid>,
-) -> Result<Json<User>, AppError> {
+) -> Result<Json<User>, app::Error> {
 	use crate::schema::users::dsl::*;
 
-	let mut conn = pool.get().await.map_err(AppError::internal)?;
+	let mut conn = pool.get().await.map_err(app::Error::internal)?;
 	let user = users
 		.find(user_id)
 		.select(User::as_select())
@@ -140,9 +139,9 @@ pub async fn get_user(
 		.await
 		.map_err(|e| match e {
 			diesel::result::Error::NotFound => {
-				AppError::not_found(format!("User {user_id} not found"))
+				app::Error::not_found(format!("User {user_id} not found"))
 			}
-			other => AppError::internal(other),
+			other => app::Error::internal(other),
 		})?;
 
 	Ok(Json(user))
