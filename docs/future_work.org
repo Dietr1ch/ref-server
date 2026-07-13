@@ -30,7 +30,28 @@ Demonstrates:
 - The async runtime outside a request context
 
 
-* Authentication via Keycloak (OIDC/OAuth2)
+* Authentication
+** Alternatives
+*** Custom
+- ~allowthem~ :: This library is specifically designed for this use case, with
+   an "embedded" mode where it manages authentication tables directly in your
+   application's database. You add it as a dependency, pass your database pool,
+   and it provides a AuthClient trait for registration, login, and session
+   management directly within your app. It supports email/password, OAuth2 login
+   (Google, GitHub), and TOTP-based MFA.
+- ~axum-oidc-client~ :: If you want to use an existing external identity
+   provider (like Google, GitHub, or a corporate provider) but want to skip the
+   overhead of running your own full service, this is a strong choice. It's a
+   middleware library that handles the OAuth2/OIDC protocol with PKCE, automatic
+   token refresh, and provides type-safe extractors for authenticated users.
+- ~sa-token-rust~ :: This is a comprehensive authentication and authorization
+   framework with specific sa-token-plugin-axum support. It offers a wide array
+   of features, including fine-grained RBAC, distributed session management, and
+   SSO capabilities.
+- ~auth-framework~ :: Marketed as a complete client and server solution, this
+   framework provides OAuth 2.0 authorization server capabilities, OIDC
+
+*** Rely on Keycloak (OIDC/OAuth2)
   Demonstrates:
   - OIDC discovery and JWKS verification in axum middleware
   - Guarding routes with a ~RequireAuth~ extractor (or similar)
@@ -39,10 +60,10 @@ Demonstrates:
   - Replacing the raw user CRUD with self-service ~GET /users/me~ and ~PATCH /users/me~ endpoints (read and edit own profile)
   - Integration test that obtains a real token from Keycloak
 
-** TODO Add Keycloak to the devenv services (shares the Postgres instance)
-*** References
+**** TODO Add Keycloak to the devenv services (shares the Postgres instance)
+***** References
 - https://www.keycloak.org/server/db
 - https://www.keycloak.org/server/configuration
-** TODO Set up a Keycloak realm and client for the API
-** TODO Authentication via Keycloak (OIDC/OAuth2)
+**** TODO Set up a Keycloak realm and client for the API
+**** TODO Authentication via Keycloak (OIDC/OAuth2)
 Replace the raw ~/users~ CRUD with a real login flow backed by Keycloak.
