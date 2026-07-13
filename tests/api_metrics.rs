@@ -34,6 +34,17 @@ async fn metrics_returns_200() {
 async fn metrics_contains_expected_entries() {
 	let app = common::test_app().await;
 
+	// NOTE: Request /health so there's data for the following /metrics request
+	app.clone()
+		.oneshot(
+			Request::builder()
+				.uri("/health")
+				.body(Body::empty())
+				.unwrap(),
+		)
+		.await
+		.unwrap();
+
 	let response = app
 		.oneshot(
 			Request::builder()
