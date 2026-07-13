@@ -14,3 +14,8 @@ includes = ["*.nix"]
 command = "rustfmt"
 options = ["--config-path", ".rustfmt.toml"]
 includes = ["*.rs"]
+
+[formatter.python]
+command = "ruff"
+options = ["fmt"]
+includes = ["*.py"]

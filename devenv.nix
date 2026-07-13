@@ -166,6 +166,41 @@
 
     }; # ..$monitoring
 
+    # DataLab
+    # -------
+    "datalab".module = { ... }: {
+      # TODO: Consider extending backend to get data
+
+      languages = {
+        # https://devenv.sh/languages/python/
+        python = {
+          enable = true;
+
+          lsp = {
+            package = pkgs.ruff;
+          };
+
+          venv.enable = true;
+          package = pkgs.python3.withPackages (
+            ps: with ps; [
+              duckdb
+              numpy
+              polars
+            ]
+          );
+        }; # ..$datalab.languages.rust
+      }; # ..$datalab.languages
+
+      packages = with pkgs; [
+        duckdb
+        gnuplot
+      ]; # ..$datalab.packages
+
+      env = {
+        "ENV_DATALAB" = "enabled";
+      }; # ..$datalab.env
+    }; # ..$datalab
+
   }; # ..profiles
 
   # Languages
@@ -223,6 +258,7 @@
           formatters = with pkgs; [
             # rustfmt already included in (./rust-toolchain.toml)
             nixfmt
+            ruff
           ]; # ..git-hooks.hooks.treefmt.settings.formatters
         }; # ..git-hooks.hooks.treefmt.settings
 

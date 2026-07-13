@@ -1,0 +1,9 @@
+line-length = 100
+
+[format]
+quote-style = "single"
+indent-style = "tab"
+docstring-code-format = true
+
+# Disable formatting in Markdown files
+extend-exclude = ["*.md"]
