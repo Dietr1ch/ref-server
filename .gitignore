@@ -21,3 +21,7 @@
 !.*.example
 !.*.toml
 TODOs.org
+
+
+# Emacs
+!.dir-locals.el
