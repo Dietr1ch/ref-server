@@ -5,6 +5,7 @@ edition = "2024"
 readme = "README.org"
 default-run = "server"
 
+
 [dependencies]
 axum = "0.8"
 tokio = { version = "1", features = ["full"] }
@@ -31,6 +32,11 @@ googletest = "0.14"
 [lints.clippy]
 # https://rust-lang.github.io/rust-clippy/master/index.html#unwrap_used
 unwrap_used = "deny"
+# https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+must_use_candidate = "warn"
+# https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+needless_pass_by_value = "warn"
+
 
 [profile.dev]
 debug = "line-tables-only"
