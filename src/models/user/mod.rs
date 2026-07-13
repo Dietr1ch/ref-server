@@ -1,3 +1,6 @@
+pub mod request;
+pub mod response;
+
 use chrono::{DateTime, Utc};
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -12,12 +15,4 @@ pub struct User {
 	pub name: String,
 	pub email: String,
 	pub created_at: DateTime<Utc>,
-}
-
-/// Input payload for creating a new user.
-#[derive(Debug, Clone, Serialize, Deserialize, Insertable)]
-#[diesel(table_name = crate::schema::users)]
-pub struct NewUser {
-	pub name: String,
-	pub email: String,
 }

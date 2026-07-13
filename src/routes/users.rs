@@ -18,7 +18,8 @@ use serde::Deserialize;
 use uuid::Uuid;
 
 use crate::app;
-use crate::models::user::{NewUser, User};
+use crate::models::user::User;
+use crate::models::user::request;
 
 /// Query parameters for the users collection endpoint.
 #[derive(Debug, Default, Deserialize)]
@@ -103,7 +104,7 @@ pub async fn list_users(
 /// POST /users — create a new user.
 pub async fn create_user(
 	State(pool): State<app::DbPool>,
-	Json(new_user): Json<NewUser>,
+	Json(new_user): Json<request::New>,
 ) -> Result<(StatusCode, Json<User>), app::Error> {
 	use crate::schema::users::dsl::*;
 
