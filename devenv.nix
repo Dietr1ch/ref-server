@@ -201,6 +201,14 @@
       }; # ..$datalab.env
     }; # ..$datalab
 
+    # CI
+    # --
+    "ci" = {
+      extends = [
+        "frontend"
+        "backend"
+      ];
+    }; # ..$ci
   }; # ..profiles
 
   # Languages
