@@ -67,10 +67,12 @@ build:
 
 # Run all tests (requires `just up` for integration tests)
 test-all:
+	# NOTE: This bails out quickly. Run `ci` for exhaustive checks
 	cargo nextest run
 
 # Run fast unit tests (no database needed)
 test-unit:
+	# NOTE: This bails out quickly. Run `ci-quick` for exhaustive checks
 	cargo nextest run --lib
 
 # Run clippy lints
@@ -102,6 +104,10 @@ clean:
 
 # Run the full CI pipeline (requires PostgreSQL via `just up`)
 ci: check lint test-all
+	# Run all tests to completion!
+	cargo nextest run --no-fail-fast
 
 # Quick CI — unit tests only, no database needed
 ci-quick: check lint test-unit
+	# Run all unit tests to completion!
+	cargo nextest run --lib --no-fail-fast
