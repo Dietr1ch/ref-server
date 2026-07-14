@@ -51,8 +51,12 @@
       "fd *": "allow",
       "find *": "ask",
       // Match
+      "head *": "allow",
+      "tail *": "allow",
       "rg *": "allow",
       "grep *": "ask",
+      "awk *": "ask",
+      "gawk *": "ask",
       // Git
       "git status *": "allow",
       "git log *": "allow",
