@@ -664,6 +664,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "googletest-json-serde"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1d5cf97e26b3b8ddc85ed9fe63eb8f0dd4c1584c5068204d0fc0f3c26ccdfb9c"
+dependencies = [
+ "googletest",
+ "serde_json",
+]
+
+[[package]]
 name = "googletest_macro"
 version = "0.14.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1348,6 +1358,7 @@ dependencies = [
  "diesel_migrations",
  "eyre",
  "googletest",
+ "googletest-json-serde",
  "humantime",
  "serde",
  "serde_json",

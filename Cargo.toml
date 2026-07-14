@@ -27,6 +27,7 @@ axum-prometheus = "0.10.0"
 
 [dev-dependencies]
 googletest = "0.14"
+googletest-json-serde = "0.5"
 
 
 [lints.clippy]

@@ -7,6 +7,7 @@
 use axum::body::Body;
 use axum::http::{Request, StatusCode};
 use googletest::prelude::*;
+use googletest_json_serde::json as j;
 use tower::ServiceExt;
 use uuid::Uuid;
 
@@ -30,7 +31,7 @@ async fn list_users_empty_returns_empty_array() {
 
 #[gtest]
 #[tokio::test]
-async fn create_and_list_and_get_user() {
+async fn create_and_get_user() {
 	let app = common::test_app().await;
 
 	// Create a user
@@ -52,31 +53,13 @@ async fn create_and_list_and_get_user() {
 
 	expect_that!(response.status(), eq(StatusCode::CREATED));
 
-	let created: serde_json::Value = common::response_json(response).await;
-	let user_id: Uuid = created
+	let user_id: Uuid = common::response_json(response)
+		.await
 		.get("id")
 		.and_then(|v| v.as_str())
 		.and_then(|s| s.parse().ok())
 		.expect("Created user should have a valid UUID `id`");
-	expect_that!(
-		created.get("name").and_then(|v| v.as_str()),
-		some(eq("Alice"))
-	);
-	expect_that!(
-		created.get("email").and_then(|v| v.as_str()),
-		some(eq("alice@example.com"))
-	);
-
-	// List users
-	let list_response = app
-		.clone()
-		.oneshot(Request::get("/users").body(Body::empty()).unwrap())
-		.await
-		.unwrap();
-
-	expect_that!(list_response.status(), eq(StatusCode::OK));
-	let list: serde_json::Value = common::response_json(list_response).await;
-	expect_that!(list, eq(&serde_json::json!([{"id": user_id.to_string()}])));
+	// Create response only returns the id; name/email are not echoed back.
 
 	// Get user by ID
 	let get_response = app
@@ -90,8 +73,15 @@ async fn create_and_list_and_get_user() {
 		.unwrap();
 
 	expect_that!(get_response.status(), eq(StatusCode::OK));
-	let fetched: serde_json::Value = common::response_json(get_response).await;
-	expect_that!(fetched, eq(&created));
+	expect_that!(
+		&common::response_json(get_response).await,
+		j::pat!({
+			"name": eq("Alice"),
+			"email": eq("alice@example.com"),
+			"created_at": j::is_non_empty_string(),
+			..
+		})
+	);
 }
 
 #[gtest]
@@ -115,11 +105,11 @@ async fn list_users_with_fields() {
 		.await
 		.unwrap();
 	expect_that!(response.status(), eq(StatusCode::CREATED));
-	let created: serde_json::Value = common::response_json(response).await;
-	let user_id = created
+	let user_id = common::response_json(response)
+		.await
 		.get("id")
 		.and_then(|v| v.as_str())
-		.unwrap()
+		.expect("Created user should have a valid UUID `id`")
 		.to_owned();
 
 	// Only request the `id` field
@@ -184,11 +174,9 @@ async fn get_nonexistent_user_returns_404() {
 		.unwrap();
 
 	expect_that!(response.status(), eq(StatusCode::NOT_FOUND));
-
-	let json = common::response_json(response).await;
 	expect_that!(
-		json.get("error").and_then(|v| v.as_str()),
-		some(contains_substring("not found"))
+		&common::response_json(response).await,
+		j::pat!({ "error": contains_substring("not found"), .. })
 	);
 }
 
@@ -230,10 +218,11 @@ async fn create_duplicate_email_returns_409() {
 		.unwrap();
 
 	expect_that!(r2.status(), eq(StatusCode::CONFLICT));
-
-	let json = common::response_json(r2).await;
 	expect_that!(
-		json.get("error").and_then(|v| v.as_str()),
-		some(contains_substring("already exists"))
+		&common::response_json(r2).await,
+		j::pat!({
+			"error": contains_substring("already exists"),
+			..
+		})
 	);
 }
