@@ -86,6 +86,9 @@
       "cargo remove *": "ask",
       // Diesel
       "diesel print-schema *": "allow",
+      // Python
+      "python *": "deny",
+      "python3 *": "deny",
       "*": "ask"
     },
     "webfetch": "ask"
