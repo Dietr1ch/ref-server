@@ -4,30 +4,21 @@
 /// - :/src/routes/health.rs
 /// Docs,
 /// - :/docs/api/health.org
-use axum::body::Body;
-use axum::http::{Request, StatusCode};
+use axum::http::StatusCode;
 use googletest::prelude::*;
-use tower::ServiceExt;
 
 mod common;
 
 #[gtest]
 #[tokio::test]
 async fn health_returns_200() {
-	let app = common::test_app().await;
+	let server = common::test_server().await;
 
-	let response = app
-		.oneshot(
-			Request::builder()
-				.uri("/health")
-				.body(Body::empty())
-				.unwrap(),
-		)
-		.await
-		.unwrap();
+	let response = server.get("/health").await;
 
-	expect_that!(response.status(), eq(StatusCode::OK));
-
-	let json = common::response_json(response).await;
-	expect_that!(json, eq(&serde_json::json!({"status": "ok"})));
+	expect_that!(response.status_code(), eq(StatusCode::OK));
+	expect_that!(
+		response.json::<serde_json::Value>(),
+		eq(&serde_json::json!({"status": "ok"}))
+	);
 }

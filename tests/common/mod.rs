@@ -54,16 +54,8 @@ pub async fn test_setup() -> app::DbPool {
 	pool
 }
 
-/// Build the full axum router backed by a real database.
-pub async fn test_app() -> axum::Router {
+/// Build a test server backed by a real database.
+pub async fn test_server() -> axum_test::TestServer {
 	let pool = test_setup().await;
-	routes::router(pool)
-}
-
-/// Helper: parse a response body into a JSON Value.
-pub async fn response_json(response: axum::response::Response) -> serde_json::Value {
-	let body_bytes = axum::body::to_bytes(response.into_body(), 1024 * 1024)
-		.await
-		.unwrap();
-	serde_json::from_slice(&body_bytes).unwrap()
+	axum_test::TestServer::new(routes::router(pool))
 }

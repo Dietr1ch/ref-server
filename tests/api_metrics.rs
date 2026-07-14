@@ -4,61 +4,31 @@
 /// - :/src/routes/mod.rs
 /// Docs,
 /// - :/docs/api/metrics.org
-use axum::body::Body;
-use axum::http::{Request, StatusCode};
+use axum::http::StatusCode;
 use googletest::prelude::*;
-use tower::ServiceExt;
 
 mod common;
 
 #[gtest]
 #[tokio::test]
 async fn metrics_returns_200() {
-	let app = common::test_app().await;
+	let server = common::test_server().await;
 
-	let response = app
-		.oneshot(
-			Request::builder()
-				.uri("/metrics")
-				.body(Body::empty())
-				.unwrap(),
-		)
-		.await
-		.unwrap();
+	let response = server.get("/metrics").await;
 
-	expect_that!(response.status(), eq(StatusCode::OK));
+	expect_that!(response.status_code(), eq(StatusCode::OK));
 }
 
 #[gtest]
 #[tokio::test]
 async fn metrics_contains_expected_entries() {
-	let app = common::test_app().await;
+	let server = common::test_server().await;
 
 	// NOTE: Request /health so there's data for the following /metrics request
-	app.clone()
-		.oneshot(
-			Request::builder()
-				.uri("/health")
-				.body(Body::empty())
-				.unwrap(),
-		)
-		.await
-		.unwrap();
+	server.get("/health").await;
 
-	let response = app
-		.oneshot(
-			Request::builder()
-				.uri("/metrics")
-				.body(Body::empty())
-				.unwrap(),
-		)
-		.await
-		.unwrap();
-
-	let body_bytes = axum::body::to_bytes(response.into_body(), 1024 * 1024)
-		.await
-		.unwrap();
-	let body = String::from_utf8(body_bytes.to_vec()).unwrap();
+	let response = server.get("/metrics").await;
+	let body = response.text();
 
 	expect_that!(body, contains_substring("axum_http_requests_total"));
 	expect_that!(
