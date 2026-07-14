@@ -1,0 +1,57 @@
+#+name: Posts
+
+The Posts for this system
+
+* Definition
+
+#+begin_src sql
+create table users (
+  id uuid primary key default uuidv7(),
+  name varchar(255) not null,
+  email varchar(255) not null unique,
+  created_at timestamptz not null default now()
+);
+#+end_src
+
+* Queries
+
+** Raw table
+#+begin_src sql :engine postgres
+  select *
+  from posts
+  limit 10
+#+end_src
+
+#+RESULTS:
+| id | user_id | title | body | created_at |
+|----+---------+-------+------+------------|
+
+** Raw data
+
+#+begin_src sql :engine postgres :results output
+  \d+ posts
+#+end_src
+
+*** ~public.posts~
+
+| Column     | Type                     | Collation | Nullable | Default  | Storage  | Compression | Stats target | Description |
+|------------+--------------------------+-----------+----------+----------+----------+-------------+--------------+-------------|
+| id         | uuid                     |           | not null | uuidv7() | plain    |             |              |             |
+| user_id    | uuid                     |           | not null |          | plain    |             |              |             |
+| title      | character varying(255)   |           | not null |          | extended |             |              |             |
+| body       | text                     |           |          |          | extended |             |              |             |
+| created_at | timestamp with time zone |           | not null | now()    | plain    |             |              |             |
+
+**** Indexes:
+- "posts_pkey" PRIMARY KEY, btree (id)
+- "idx_posts_user_id" btree (user_id)
+**** Check constraints:
+- "posts_body_not_empty" CHECK (body IS NULL OR body <> ''::text)
+**** Foreign-key constraints:
+- "posts_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+**** Not-null constraints:
+- "posts_id_not_null" NOT NULL "id"
+- "posts_user_id_not_null" NOT NULL "user_id"
+- "posts_title_not_null" NOT NULL "title"
+- "posts_created_at_not_null" NOT NULL "created_at"
+Access method: heap

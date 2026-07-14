@@ -8,14 +8,6 @@ Once features are implemented make sure to remove the task and document it
  elsewhere as you see fit.
 
 
-* Related resource (e.g. posts with ownership)
-Demonstrates:
-- New migration with a foreign key referencing ~users.id~
-- Diesel model with ~belongs_to~ association
-- Nested routes (~/users/:id/posts~)
-- Full lifecycle: migration → model → route → handler → test → doc
-
-
 * Pagination on the users collection
 Demonstrates:
 - Evolving an existing endpoint without breaking changes
