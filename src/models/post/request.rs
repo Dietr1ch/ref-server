@@ -5,8 +5,7 @@ use uuid::Uuid;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NewPayload {
 	pub title: String,
-	#[serde(default)]
-	pub body: String,
+	pub body: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Insertable)]
@@ -14,5 +13,5 @@ pub struct NewPayload {
 pub struct New {
 	pub user_id: Uuid,
 	pub title: String,
-	pub body: String,
+	pub body: Option<String>,
 }

@@ -13,6 +13,6 @@ pub struct Post {
 	pub id: Uuid,
 	pub user_id: Uuid,
 	pub title: String,
-	pub body: String,
+	pub body: Option<String>,
 	pub created_at: DateTime<Utc>,
 }

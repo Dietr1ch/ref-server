@@ -58,7 +58,7 @@ pub async fn create_post(
 		.values(&request::New {
 			user_id,
 			title: payload.title,
-			body: payload.body,
+			body: payload.body.filter(|b| !b.is_empty()),
 		})
 		.returning(Post::as_returning())
 		.get_result(&mut conn)

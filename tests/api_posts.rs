@@ -98,7 +98,7 @@ async fn create_and_list_posts() {
 
 #[gtest]
 #[tokio::test]
-async fn create_post_without_body_defaults_to_empty() {
+async fn create_titleless_post() {
 	let server = common::test_server().await;
 
 	let response = server
@@ -124,6 +124,48 @@ async fn create_post_without_body_defaults_to_empty() {
 		.await;
 
 	expect_that!(response.status_code(), eq(StatusCode::CREATED));
+	let post = response.json::<serde_json::Value>();
+	expect_that!(post.get("id"), some(j::is_non_empty_string()));
+}
+
+#[gtest]
+#[tokio::test]
+async fn create_post_with_empty_body_inserts_null() {
+	let server = common::test_server().await;
+
+	let response = server
+		.post("/users")
+		.json(&serde_json::json!({
+			"name": "Dave",
+			"email": "dave@example.com",
+		}))
+		.await;
+	let user_id: Uuid = response
+		.json::<serde_json::Value>()
+		.get("id")
+		.and_then(|v| v.as_str())
+		.and_then(|s| s.parse().ok())
+		.expect("Created user should have a valid UUID `id`");
+
+	// Create Post (POST /users/${USER_ID}/posts)
+	let response = server
+		.post(&format!("/users/{user_id}/posts"))
+		.json(&serde_json::json!({
+			"title": "Empty body",
+			"body": "",
+		}))
+		.await;
+
+	expect_that!(response.status_code(), eq(StatusCode::CREATED));
+	let posts = server.get(&format!("/users/{user_id}/posts")).await;
+	expect_that!(
+		posts.json::<serde_json::Value>(),
+		j::elements_are![j::pat!({
+			"title": eq("Empty body"),
+			"body": j::is_null(),
+			..
+		})]
+	);
 }
 
 #[gtest]

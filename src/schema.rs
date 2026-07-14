@@ -17,7 +17,7 @@ diesel::table! {
 		user_id -> Uuid,
 		#[max_length = 255]
 		title -> Varchar,
-		body -> Text,
+		body -> Nullable<Text>,
 		created_at -> Timestamptz,
 	}
 }
