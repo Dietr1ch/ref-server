@@ -25,3 +25,29 @@ create table users (
 #+RESULTS:
 | id | name | email | created_at |
 |----+------+-------+------------|
+
+** Raw data
+
+#+begin_src sql :engine postgres :results output
+  \d+ users
+#+end_src
+
+*** ~public.users~
+| Column     | Type                     | Collation | Nullable | Default            | Storage  | Compression | Stats target | Description |
+|------------+--------------------------+-----------+----------+--------------------+----------+-------------+--------------+-------------|
+| id         | uuid                     |           | not null | uuid_generate_v4() | plain    |             |              |             |
+| name       | character varying(255)   |           | not null |                    | extended |             |              |             |
+| email      | character varying(255)   |           | not null |                    | extended |             |              |             |
+| created_at | timestamp with time zone |           | not null | now()              | plain    |             |              |             |
+
+**** Indexes
+- "users_pkey" PRIMARY KEY, btree (id)
+- "users_email_key" UNIQUE CONSTRAINT, btree (email)
+**** Referenced by
+- TABLE "posts" CONSTRAINT "posts_user_id_fkey" FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+**** Not-null constraints
+- "users_id_not_null" NOT NULL "id"
+- "users_name_not_null" NOT NULL "name"
+- "users_email_not_null" NOT NULL "email"
+- "users_created_at_not_null" NOT NULL "created_at"
+Access method: heap

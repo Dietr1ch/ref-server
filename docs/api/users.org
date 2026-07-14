@@ -26,9 +26,6 @@ Returns user objects.  The primary key ~id~ is always included; use
   # → [{"id": "…", "name": "…", "email": "…"}, …]
 #+end_src
 
-** Get existing user                                               :success:
-get /users/<uuid>
-
 ** Get missing user                                                  :error:
 # * Returns an HTTP 404 when the user doesn't match
 #
@@ -40,6 +37,10 @@ get /users/<uuid>
 get /users/00000000-aaaa-bbbb-bbbb-000000000000
 
 ** Create user                                               :success:error:
+:PROPERTIES:
+:Verb-Store: new-user
+:END:
+
 # * Returns an HTTP 201 when a new valid user is created
 #
 # * Returns an HTTP 409 when the user's email is already registered
@@ -58,6 +59,9 @@ Content-Type: application/json
 }
 #+end_src
 
+
+** Get existing user                                               :success:
+get /users/{{(verb-json-get (oref (verb-stored-response "new-user") body) "id")}}
 
 * Misc                                                              :ARCHIVE:
 # Local Variables:
