@@ -1,0 +1,37 @@
+#+name: /users/{id}/posts API
+
+Code,
+- [[../../src/routes/posts.rs][:/src/routes/posts.rs]]
+Tests,
+- [[../../tests/api_posts.rs][:/tests/api_posts.rs]]
+
+
+* /users/{{(verb-json-get (oref (verb-stored-response "new-user") body) "id")}}/posts                                                 :verb:
+template http://localhost:3001
+
+** List posts for a user                                            :success:
+get /users/{{(verb-json-get (oref (verb-stored-response "new-user") body) "id")}}/posts
+
+** Create a post for a user                                  :success:error:
+:PROPERTIES:
+:Verb-Store: new-post
+:END:
+
+# * Returns an HTTP 201 when a new valid post is created
+#
+# * Returns an HTTP 404 when the user does not exist
+post /users/{{(verb-json-get (oref (verb-stored-response "new-user") body) "id")}}/posts
+Content-Type: application/json
+
+#+begin_src json
+{
+  "title": "My first post",
+  "body": "Hello, world!"
+}
+#+end_src
+
+
+* Misc                                                              :ARCHIVE:
+# Local Variables:
+# eval: (verb-mode)
+# End:

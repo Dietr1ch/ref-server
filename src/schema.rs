@@ -10,3 +10,18 @@ diesel::table! {
 		created_at -> Timestamptz,
 	}
 }
+
+diesel::table! {
+	posts (id) {
+		id -> Uuid,
+		user_id -> Uuid,
+		#[max_length = 255]
+		title -> Varchar,
+		body -> Text,
+		created_at -> Timestamptz,
+	}
+}
+
+diesel::joinable!(posts -> users (user_id));
+
+diesel::allow_tables_to_appear_in_same_query!(posts, users,);
