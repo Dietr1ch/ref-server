@@ -47,6 +47,7 @@
       "ls *": "allow",
       "mv *": "ask",
       "rm *": "deny",
+      "mkdir *": "ask",
       // Find
       "fd *": "allow",
       "find *": "ask",
