@@ -9,20 +9,87 @@ Once features are implemented make sure to remove the task and document it
 
 
 * Pagination on the users collection
+
 Demonstrates:
 - Evolving an existing endpoint without breaking changes
 - ~?page~ / ~?per_page~ query parameters
 - Diesel ~OFFSET~/~LIMIT~ (or keyset pagination for larger datasets)
 - Returning pagination metadata (~total~, ~next~, ~prev~)
 
+**** TODO Add ~?page~ and ~?per_page~ query parameters to ~GET /users~
+**** TODO Decide on cursor vs offset-based pagination
+**** TODO Return pagination metadata alongside results
+***** Reference: https://jsonapi.org/format/#fetching-pagination
+**** TODO Update integration tests to exercise paginated responses
+**** TODO Make pagination metadata include ~total~, ~next~, and ~prev~ URLs
+**** TODO Document the pagination contract in /docs/api/users.org
+
+
+* Health check that actually probes the database
+
+Demonstrates:
+- Service-level health versus liveness
+- Pool health checks (ping, query)
+- Returning structured degradation info (~{"status":"degraded","checks":{"db":"ok"}}~)
+
+The current ~/health~ returns a static ~{"status":"ok"}~. A real health endpoint
+would ping the connection pool and report whether the database is reachable.
+
+**** TODO Add a DB ping before responding from ~/health~
+**** TODO Return ~503~ if the database is unreachable
+**** TODO Return structured check results ({\"status\":\"ok\",\"checks\":{\"db\":\"ok\"}})
+**** TODO Update integration tests to expect the new shape
+
+
+* Update and delete endpoints for users
+
+Demonstrates:
+- Partial update patterns (~PATCH~) vs full replace (~PUT~)
+- JSON merge patch (~RFC 7386~)
+- Soft delete (add a ~deleted_at~ column) vs hard delete
+- Idempotent ~DELETE~ returning ~204 No Content~
+
+Currently the API only supports ~GET /users~, ~GET /users/{id}~, and ~POST /users~.
+
+**** TODO Add ~PATCH /users/{id}~ for partial updates
+***** Reference: https://datatracker.ietf.org/doc/html/rfc7386
+**** TODO Add ~DELETE /users/{id}~ (hard delete)
+**** TODO Update posts table to cascade on user delete (or enforce referential integrity)
+**** TODO Add unit tests for partial update validation
+**** TODO Add integration tests for update and delete
+**** TODO Document the endpoints in /docs/api/users.org
+
+
+* Middleware with actual logic
+
+Demonstrates:
+- Stateful middleware (e.g. rate-limiter with a counter)
+- Short-circuiting requests (e.g. rejecting before reaching the handler)
+- Error responses from middleware
+
+The current ~request_timer~ middleware only logs timing; it never rejects or
+transforms a request.
+
+**** TODO Implement a request-ID middleware (~x-request-id~ header)
+***** Reference: https://www.ietf.org/archive/id/draft-ietf-httpbis-request-id-00.html
+**** TODO Add unit tests for middleware behaviour (rejection, header injection)
+
 
 * Background job (e.g. periodic health report)
+
 Demonstrates:
 - Tokio tasks alongside the HTTP server
 - The async runtime outside a request context
+- Graceful shutdown (signal handling, draining tasks)
+
+**** TODO Scaffold a tokio task that runs alongside the HTTP server
+**** TODO Have the task periodically query the database and log results
+**** TODO Wire graceful shutdown so the task finishes cleanly on ~SIGTERM~ / ~SIGINT~
+**** TODO Add a test that verifies the task runs (e.g. a metrics check after a tick)
 
 
 * Authentication
+
 ** Alternatives
 *** Custom
 - ~allowthem~ :: This library is specifically designed for this use case, with
