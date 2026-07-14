@@ -78,7 +78,10 @@
       "cargo run *": "ask",
       // Rust - Crates
       "cargo add *": "ask",
-      "cargo remove *": "ask"
+      "cargo remove *": "ask",
+      // Diesel
+      "diesel print-schema *": "allow",
+      "*": "ask"
     },
     "webfetch": "ask"
   }
