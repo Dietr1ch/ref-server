@@ -6,7 +6,7 @@ The Users for this system
 
 #+begin_src sql
 create table users (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default uuidv7(),
   name varchar(255) not null,
   email varchar(255) not null unique,
   created_at timestamptz not null default now()
@@ -33,12 +33,12 @@ create table users (
 #+end_src
 
 *** ~public.users~
-| Column     | Type                     | Collation | Nullable | Default            | Storage  | Compression | Stats target | Description |
-|------------+--------------------------+-----------+----------+--------------------+----------+-------------+--------------+-------------|
-| id         | uuid                     |           | not null | uuid_generate_v4() | plain    |             |              |             |
-| name       | character varying(255)   |           | not null |                    | extended |             |              |             |
-| email      | character varying(255)   |           | not null |                    | extended |             |              |             |
-| created_at | timestamp with time zone |           | not null | now()              | plain    |             |              |             |
+| Column     | Type                     | Collation | Nullable | Default  | Storage  | Compression | Stats target | Description |
+|------------+--------------------------+-----------+----------+----------+----------+-------------+--------------+-------------|
+| id         | uuid                     |           | not null | uuidv7() | plain    |             |              |             |
+| name       | character varying(255)   |           | not null |          | extended |             |              |             |
+| email      | character varying(255)   |           | not null |          | extended |             |              |             |
+| created_at | timestamp with time zone |           | not null | now()    | plain    |             |              |             |
 
 **** Indexes
 - "users_pkey" PRIMARY KEY, btree (id)
