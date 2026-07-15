@@ -47,6 +47,12 @@ struct Config {
 	/// Socket address (host:port) to listen on.
 	#[arg(env = "API_LISTEN_SOCKET", default_value = "0.0.0.0:3001")]
 	listen_socket: String,
+
+	// CORS
+	/// Allowed origins for CORS (repeatable, or use `*` for any).
+	/// When empty, no CORS headers are sent.
+	#[arg(long, env = "CORS_ALLOW_ORIGINS", value_delimiter = ',')]
+	cors_allow_origins: Vec<String>,
 }
 
 #[tokio::main]
@@ -111,7 +117,7 @@ async fn main() -> eyre::Result<()> {
 
 	// HTTP server
 	// -----------
-	let app = routes::router(pool);
+	let app = routes::router(pool, config.cors_allow_origins);
 
 	let listener = tokio::net::TcpListener::bind(&config.listen_socket)
 		.await

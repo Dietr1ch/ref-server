@@ -18,6 +18,20 @@ const MIGRATIONS: diesel_migrations::EmbeddedMigrations = embed_migrations!("mig
 /// closing the connection — PostgreSQL rolls back the open transaction,
 /// so no cleanup is needed.
 pub async fn test_server() -> axum_test::TestServer {
+	build_test_server(build_pool().await, vec![])
+}
+
+/// Same as [`test_server`] but with the given CORS allowed origins.
+///
+/// Pass a list like `["https://mypage.com"]` to test CORS behaviour, or
+/// `["*"]` for any origin.
+#[allow(dead_code)]
+pub async fn test_server_with_cors(origins: Vec<&str>) -> axum_test::TestServer {
+	let pool = build_pool().await;
+	build_test_server(pool, origins.into_iter().map(String::from).collect())
+}
+
+async fn build_pool() -> Pool<AsyncPgConnection> {
 	let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set for tests");
 
 	// Run migrations using sync libpq (matches server startup behaviour).
@@ -40,10 +54,7 @@ pub async fn test_server() -> axum_test::TestServer {
 		.await
 		.expect("Failed to build test pool");
 
-	// Start a test transaction on the single pooled connection.  All handler
-	// requests during this test will use the same connection — still inside
-	// this transaction — and PostgreSQL will roll it back when the pool is
-	// dropped at the end of the test.
+	// Start a test transaction on the single pooled connection.
 	{
 		let mut conn = pool
 			.get()
@@ -54,5 +65,9 @@ pub async fn test_server() -> axum_test::TestServer {
 			.expect("Failed to begin test transaction");
 	}
 
-	axum_test::TestServer::new(routes::router(pool))
+	pool
+}
+
+fn build_test_server(pool: Pool<AsyncPgConnection>, origins: Vec<String>) -> axum_test::TestServer {
+	axum_test::TestServer::new(routes::router(pool, origins))
 }
