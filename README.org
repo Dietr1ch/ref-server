@@ -50,17 +50,12 @@ pending migrations.
 
 The API server listens on ~$API_LISTEN_SOCKET:="0.0.0.0:3001"~.
 
-** 4. Try it out
-Open this file in Emacs with ~verb-mode~ enabled, then place point on any
-heading under the [[*API reference][API reference]] section below and press ~C-c C-r C-r~
-to send the request.
-
 
 * API reference
 All endpoints return JSON.  Errors follow the shape ~{"error": "message"}~.
 
-The headings in the API docs can be queried using ~verb-mode~. Use ~, r r~ (~C-c
-C-r C-r~) while on any of them to send the request.
+The headings tagged ~verb~ in the API docs can be queried using ~verb-mode~.
+Use ~, r r~ (~C-c C-r C-r~) while on any of them to send the request.
 
 - [[./docs/api/health.org][/health]]
 - [[./docs/api/users.org][/users]]
