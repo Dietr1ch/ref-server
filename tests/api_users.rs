@@ -153,3 +153,111 @@ async fn create_duplicate_email_returns_409() {
 		})
 	);
 }
+
+#[gtest]
+#[tokio::test]
+async fn patch_user_name() {
+	let server = common::test_server().await;
+
+	// Create a user
+	let response = server
+		.post("/users")
+		.json(&serde_json::json!({
+			"name": "Alice",
+			"email": "alice-patch@example.com",
+		}))
+		.await;
+	expect_that!(response.status_code(), eq(StatusCode::CREATED));
+	let user_id = response
+		.json::<serde_json::Value>()
+		.get("id")
+		.and_then(|v| v.as_str())
+		.expect("Created user should have a valid UUID `id`")
+		.to_owned();
+
+	// Patch the name — default returns 204 No Content
+	let response = server
+		.patch(&format!("/users/{user_id}"))
+		.json(&serde_json::json!({
+			"name": "Alice Updated",
+		}))
+		.await;
+	expect_that!(response.status_code(), eq(StatusCode::NO_CONTENT));
+
+	// Verify the change persisted
+	let response = server.get(&format!("/users/{user_id}")).await;
+	expect_that!(response.status_code(), eq(StatusCode::OK));
+	expect_that!(
+		&response.json::<serde_json::Value>(),
+		j::pat!({
+			"name": eq("Alice Updated"),
+			..
+		})
+	);
+}
+
+#[gtest]
+#[tokio::test]
+async fn patch_user_name_with_return_representation() {
+	let server = common::test_server().await;
+
+	// Create a user
+	let response = server
+		.post("/users")
+		.json(&serde_json::json!({
+			"name": "Bob",
+			"email": "bob-patch@example.com",
+		}))
+		.await;
+	expect_that!(response.status_code(), eq(StatusCode::CREATED));
+	let user_id = response
+		.json::<serde_json::Value>()
+		.get("id")
+		.and_then(|v| v.as_str())
+		.expect("Created user should have a valid UUID `id`")
+		.to_owned();
+
+	// Patch with Prefer: return=representation — returns 200 + resource without internal fields
+	let response = server
+		.patch(&format!("/users/{user_id}"))
+		.add_header("Prefer", "return=representation")
+		.json(&serde_json::json!({
+			"name": "Bob Updated",
+		}))
+		.await;
+	expect_that!(response.status_code(), eq(StatusCode::OK));
+	let json = response.json::<serde_json::Value>();
+	expect_that!(
+		&json,
+		j::pat!({
+			"name": eq("Bob Updated"),
+			"email": eq("bob-patch@example.com"),
+			..
+		})
+	);
+	// Verify internal fields are not exposed
+	expect_that!(json.get("created_at"), none());
+	// Verify id is present
+	expect_that!(json.get("id").and_then(|v| v.as_str()), some(eq(&user_id)));
+}
+
+#[gtest]
+#[tokio::test]
+async fn patch_nonexistent_user_returns_404() {
+	let server = common::test_server().await;
+
+	let response = server
+		.patch(&format!("/users/{}", Uuid::nil()))
+		.json(&serde_json::json!({
+			"name": "Ghost",
+		}))
+		.await;
+	expect_that!(response.status_code(), eq(StatusCode::NOT_FOUND));
+	expect_that!(
+		&response.json::<serde_json::Value>(),
+		j::pat!({
+			"error": contains_substring("not found"),
+			..
+		})
+	);
+}

@@ -53,15 +53,44 @@ post /users
 Content-Type: application/json
 
 #+begin_src json
-{
-  "name": "Alice",
-  "email": "alice@example.com"
-}
+  {
+    "name": "Alice",
+    "email": "alice@example.com"
+  }
 #+end_src
 
 
 ** Get existing user                                               :success:
 get /users/{{(verb-json-get (oref (verb-stored-response "new-user") body) "id")}}
+
+** Update user name                                             :success:error:
+# Update a user's name with a =PATCH= request.  Only the ~name~ field is
+# mutable; ~id~ and ~created_at~ are immutable at the database level
+# (enforced via a PostgreSQL trigger).
+
+*** Update user name                                        :success:error:
+patch /users/{{(verb-json-get (oref (verb-stored-response "new-user") body) "id")}}
+Content-Type: application/json
+# This gets an empty response 204
+
+#+begin_src json
+  {
+    "name": "Alice Updated"
+  }
+#+end_src
+
+*** Update user name and get representation back (RFC 7240) :success:error:
+# This gets a (internal/private filtered) User representation back (200)
+
+patch /users/{{(verb-json-get (oref (verb-stored-response "new-user") body) "id")}}
+Content-Type: application/json
+Prefer: return=representation
+
+#+begin_src json
+{
+  "name": "Alice"
+}
+#+end_src
 
 * Misc                                                              :ARCHIVE:
 # Local Variables:

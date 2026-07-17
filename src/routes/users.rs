@@ -9,6 +9,7 @@ use axum::{
 	Json,
 	extract::{Path, Query, State},
 	http::StatusCode,
+	response::IntoResponse,
 };
 use diesel::prelude::*;
 use diesel::query_source::Column;
@@ -150,4 +151,54 @@ pub async fn get_user(
 		})?;
 
 	Ok(Json(user))
+}
+
+/// PATCH /users/{id} — partially update a user (RFC 7386 JSON Merge Patch).
+///
+/// Currently only supports updating the `name` field.
+///
+/// By default returns `204 No Content` to avoid leaking data the client
+/// didn't ask for.  Set `Prefer: return=representation` (RFC 7240) to
+/// receive the full updated resource as `200 OK`.
+pub async fn patch_user(
+	State(pool): State<app::DbPool>,
+	Path(user_id): Path<Uuid>,
+	headers: axum::http::header::HeaderMap,
+	Json(patch): Json<request::Patch>,
+) -> Result<axum::response::Response, app::Error> {
+	use crate::schema::users::dsl::*;
+
+	let mut conn = pool.get().await.map_err(app::Error::internal)?;
+
+	let user = if let Some(new_name) = &patch.name {
+		diesel::update(users.find(user_id))
+			.set(name.eq(new_name))
+			.returning(User::as_returning())
+			.get_result(&mut conn)
+			.await
+	} else {
+		users
+			.find(user_id)
+			.select(User::as_select())
+			.first(&mut conn)
+			.await
+	}
+	.map_err(|e| match e {
+		diesel::result::Error::NotFound => {
+			app::Error::not_found(format!("User {user_id} not found"))
+		}
+		other => app::Error::internal(other),
+	})?;
+
+	let wants_representation = headers
+		.get("prefer")
+		.and_then(|v| v.to_str().ok())
+		.map(|v| v.eq_ignore_ascii_case("return=representation"))
+		.unwrap_or(false);
+
+	if wants_representation {
+		Ok((StatusCode::OK, Json(response::Patched::from(&user))).into_response())
+	} else {
+		Ok(StatusCode::NO_CONTENT.into_response())
+	}
 }

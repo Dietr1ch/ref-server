@@ -25,7 +25,7 @@ pub fn router(pool: app::DbPool, cors_allow_origins: Vec<String>) -> Router {
 	let mut router = Router::new()
 		.route("/health", get(health::health))
 		.route("/users", get(users::list_users).post(users::create_user))
-		.route("/users/{id}", get(users::get_user))
+		.route("/users/{id}", get(users::get_user).patch(users::patch_user))
 		.nest(
 			"/users/{user_id}",
 			Router::new().route("/posts", get(posts::list_posts).post(posts::create_post)),
