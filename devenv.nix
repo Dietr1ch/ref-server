@@ -23,7 +23,7 @@
       enable = true;
 
       # Pin PostgreSQL version to avoid surprises when nixpkgs bumps the default
-      package = pkgs.postgresql_18_jit;
+      package = pkgs.postgresql_18;
 
       # Listen on Unix socket only (default) — diesel connects via $PGHOST
       listen_addresses = "";
