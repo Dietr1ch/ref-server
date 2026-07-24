@@ -1,3 +1,4 @@
+// User-level: ~/.config/opencode/opencode.jsonc
 {
   "$schema": "https://opencode.ai/config.json",
   "lsp": true,
@@ -19,9 +20,15 @@
     }
   },
   "permission": {
+    "list": "allow",
+    "lsp": "allow",
     "read": {
       "Justfile": "allow",
       ".example": "allow",
+      // Project directories
+      "docs/**/": "allow",
+      "src/**/": "allow",
+      "tests/**/": "allow",
       // Rust
       "*.rs": "allow",
       // Nix
@@ -40,6 +47,26 @@
       "*.json": "allow",
       "*.ron": "allow",
       "*.toml": "allow"
+    },
+    "glob": {
+      // Docs
+      "*.org": "allow",
+      // Code
+      "*.rs": "allow",
+      // Config
+      "*.nix": "allow",
+      "*": "ask"
+    },
+    "write": {
+      // Docs
+      "*.org": "allow",
+      // Code
+      "*.rs": "ask",
+      // Config
+      "*.nix": "ask",
+      "*.json": "ask",
+      "*.toml": "ask",
+      "*": "ask"
     },
     "bash": {
       // Unix
