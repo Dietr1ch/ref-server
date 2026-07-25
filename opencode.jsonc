@@ -61,7 +61,7 @@
       // Docs
       "*.org": "allow",
       // Code
-      "*.rs": "ask",
+      "*.rs": "allow",
       // Config
       "*.nix": "ask",
       "*.json": "ask",
