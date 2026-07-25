@@ -27,6 +27,6 @@ need_stdout = true
 [jobs.fmt]
 command = [
 	"cargo",
-	"fmt"
+	"fmt",
 ]
 need_stdout = false
